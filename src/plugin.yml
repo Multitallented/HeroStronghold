@@ -1,12 +1,10 @@
-author: multitallented
+author: Multitallented
 database: false
-description: Allows you to create regions that can give buffs or debuffs to players
-  with certain HeroClasses.
-generator: http://dinnerbone.com/minecraft/tools/pluginator/
+description: Allows you to create regions that can give buffs or debuffs to players with certain HeroClasses.
 main: main.java.multitallented.plugins.herostronghold.HeroStronghold
 name: HeroStronghold
 startup: postworld
-version: '0.1'
+version: 0.1-b000
 depend: [Vault]
 softdepend: [Heroes]
 commands:
