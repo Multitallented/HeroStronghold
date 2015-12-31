@@ -2,8 +2,11 @@ package multitallented.redcastlemedia.bukkit.townships.region;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,7 +26,7 @@ public class DefaultRegions {
             shackFile.createNewFile();
             FileConfiguration config = new YamlConfiguration();
             config.load(shackFile);
-            ArrayList<String> tempList = new ArrayList<String>();
+            List<String> tempList = new ArrayList<String>();
             tempList.add("deny_block_build_no_reagent.1");
             tempList.add("deny_explosion.1");
             tempList.add("deny_block_break.1");
@@ -75,7 +78,7 @@ public class DefaultRegions {
             shackFile.createNewFile();
             FileConfiguration config = new YamlConfiguration();
             config.load(shackFile);
-            ArrayList<String> tempList = new ArrayList<String>();
+            List<String> tempList = new ArrayList<String>();
             tempList.add("man_cannon.3");
             config.set("effects",tempList);
             tempList = new ArrayList<String>();
@@ -98,7 +101,7 @@ public class DefaultRegions {
             shackFile.createNewFile();
             FileConfiguration config = new YamlConfiguration();
             config.load(shackFile);
-            ArrayList<String> tempList = new ArrayList<String>();
+            List<String> tempList = new ArrayList<String>();
             tempList.add("shoot_arrow.20");
             config.set("effects",tempList);
             tempList = new ArrayList<String>();
@@ -133,7 +136,7 @@ public class DefaultRegions {
             shackFile.createNewFile();
             FileConfiguration config = new YamlConfiguration();
             config.load(shackFile);
-            ArrayList<String> tempList = new ArrayList<String>();
+            List<String> tempList = new ArrayList<String>();
             tempList.add("denyblockbuild");
             tempList.add("denyexplosion");
             tempList.add("denyblockbreak");
@@ -161,7 +164,7 @@ public class DefaultRegions {
             shackFile.createNewFile();
             FileConfiguration config = new YamlConfiguration();
             config.load(shackFile);
-            ArrayList<String> tempList = new ArrayList<String>();
+            List<String> tempList = new ArrayList<String>();
             tempList.add("denyblockbuild");
             tempList.add("denyexplosion");
             tempList.add("denyblockbreak");

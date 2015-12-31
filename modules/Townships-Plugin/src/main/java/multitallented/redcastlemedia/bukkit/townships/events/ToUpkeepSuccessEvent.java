@@ -1,6 +1,6 @@
 package multitallented.redcastlemedia.bukkit.townships.events;
 
-import java.util.ArrayList;
+import java.util.List;
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -35,11 +35,11 @@ public class ToUpkeepSuccessEvent extends Event {
         this.event = event;
     }
     
-    public void setRegionsToCreate(ArrayList<Region> r) {
+    public void setRegionsToCreate(List<Region> r) {
         event.setRegionsToCreate(r);
     }
     
-    public ArrayList<Region> getRegionsToCreate() {
+    public List<Region> getRegionsToCreate() {
         return event.getRegionsToCreate();
     }
     

@@ -97,7 +97,7 @@
 
         <!-- Compile Sources -->
         <javac srcdir="${sources.root}/${effectname}" debug = "on" destdir="${dir.workspace}/${effectname}" encoding="UTF-8"
-               classpathref="classpath" includeantruntime="true" target="1.7"/>
+               classpathref="classpath" includeantruntime="true" target="1.8"/>
 
         <!-- Generate effect.info -->
         <foreach target="create-effect-info" param="dir.pathtofile">

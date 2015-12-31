@@ -1,6 +1,6 @@
 package multitallented.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
@@ -148,7 +148,7 @@ public class EffectRaidport extends Effect {
         }
 
         private Location findTargetLocation(SuperRegion sr) {
-            ArrayList<Region> potentialTargets = getPlugin().getRegionManager().getContainedRegions(sr);
+            List<Region> potentialTargets = getPlugin().getRegionManager().getContainedRegions(sr);
             int i = 0;
             do {
                 Region currentRegion = potentialTargets.get((int) (Math.floor(Math.random() * potentialTargets.size() * 0.999)));
@@ -326,7 +326,7 @@ public class EffectRaidport extends Effect {
         public void onRegionCreated(ToRegionCreatedEvent event) {
             Region r = event.getRegion();
             Location l = r.getLocation();
-            Player player = Bukkit.getPlayer(r.getOwners().get(0));
+            Player player = r.getOwners().get(0).getPlayer();
             RegionType rt = getPlugin().getRegionManager().getRegionType(r.getType());
             if (rt == null) {
                 return;

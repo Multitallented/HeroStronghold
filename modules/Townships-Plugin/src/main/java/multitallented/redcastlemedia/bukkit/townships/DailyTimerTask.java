@@ -2,11 +2,14 @@ package multitallented.redcastlemedia.bukkit.townships;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import multitallented.redcastlemedia.bukkit.townships.events.ToDayEvent;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
 import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 
 /**
  *
@@ -22,7 +25,7 @@ public class DailyTimerTask implements Runnable {
 
     @Override
     public void run() {
-        ConfigManager cm = plugin.getConfigManager();
+        ConfigManager cm = Townships.getConfigManager();
         // Throw a new Day Event for Effects
         new Runnable() {
             @Override
@@ -38,7 +41,7 @@ public class DailyTimerTask implements Runnable {
                 double total = 0;
                 double tax = sr.getTaxes();
                 if (tax != 0) {
-                    for (String member : sr.getMembers().keySet()) {
+                    for (OfflinePlayer member : sr.getMembers().keySet()) {
                         double balance = econ.getBalance(member);
                         if (!sr.getMember(member).contains("notax") && balance > 0) {
                             if (balance - tax < 0) {
@@ -57,7 +60,7 @@ public class DailyTimerTask implements Runnable {
                 double output = rm.getSuperRegionType(sr.getType()).getOutput();
                 total += output;
                 double newBalance = total + sr.getBalance();
-                if (newBalance < 0 && plugin.getConfigManager().getDestroyNoMoney() && !rm.refreshGracePeriod(sr, false)) {
+                if (newBalance < 0 && Townships.getConfigManager().getDestroyNoMoney() && !rm.refreshGracePeriod(sr, false)) {
                     destroyThese.add(sr);
                     final String st = sr.getName();
                     new Runnable() {
@@ -74,7 +77,7 @@ public class DailyTimerTask implements Runnable {
                 int power = sr.getPower();
                 int maxPower = sr.getMaxPower();
                 int dailyPower = rm.getSuperRegionType(sr.getType()).getDailyPower();
-                if (power <= 0 && plugin.getConfigManager().getDestroyNoPower()) {
+                if (power <= 0 && Townships.getConfigManager().getDestroyNoPower()) {
                     destroyThese.add(sr);
                     final String st = sr.getName();
                     new Runnable() {

@@ -1,6 +1,6 @@
 package multitallented.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
 import multitallented.redcastlemedia.bukkit.townships.events.ToSuperRegionCreatedEvent;
@@ -152,7 +152,7 @@ public class EffectRing extends Effect {
                 return;
             }
 
-            ArrayList<Location> childLocations = sr.getChildLocations();
+            List<Location> childLocations = sr.getChildLocations();
             if (childLocations == null || childLocations.isEmpty()) {
                 return;
             }

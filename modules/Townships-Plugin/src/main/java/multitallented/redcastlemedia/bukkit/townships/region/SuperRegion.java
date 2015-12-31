@@ -1,10 +1,11 @@
 package multitallented.redcastlemedia.bukkit.townships.region;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 
 /**
  *
@@ -14,18 +15,18 @@ public class SuperRegion {
     private String name;
     private Location l;
     private String type;
-    private final Map<String, List<String>> members;
-    private final List<String> owners;
+    private final Map<OfflinePlayer, List<String>> members;
+    private final List<OfflinePlayer> owners;
     private int power;
     private double taxes = 0;
     private double balance = 0;
     private LinkedList<Double> taxRevenue;
     private int maxPower;
-    private ArrayList<Location> childLocations;
+    private List<Location> childLocations;
     private long lastDisable;
-    
-    public SuperRegion(String name, Location l, String type, List<String> owner, Map<String, List<String>> members,
-            int power, double taxes, double balance, LinkedList<Double> taxRevenue, int maxPower, ArrayList<Location> childLocations,
+
+    public SuperRegion(String name, Location l, String type, List<OfflinePlayer> owner, Map<OfflinePlayer, List<String>> members,
+            int power, double taxes, double balance, LinkedList<Double> taxRevenue, int maxPower, List<Location> childLocations,
             long lastDisable) {
         this.name = name;
         this.l = l;
@@ -53,7 +54,7 @@ public class SuperRegion {
         this.l = l;
     }
     
-    public ArrayList<Location> getChildLocations() {
+    public List<Location> getChildLocations() {
         return this.childLocations;
     }
     
@@ -108,19 +109,19 @@ public class SuperRegion {
         return type;
     }
     
-    public boolean hasMember(String name) {
+    public boolean hasMember(OfflinePlayer name) {
         return members.containsKey(name);
     }
     
-    public boolean addMember(String name, List<String> perms) {
+    public boolean addMember(OfflinePlayer name, List<String> perms) {
         return members.put(name, perms) != null;
     }
     
-    public List<String> getMember(String name) {
+    public List<String> getMember(OfflinePlayer name) {
         return members.get(name);
     }
     
-    public Map<String, List<String>> getMembers() {
+    public Map<OfflinePlayer, List<String>> getMembers() {
         return members;
     }
     
@@ -137,19 +138,19 @@ public class SuperRegion {
         return removed;
     }
     
-    public boolean hasOwner(String name) {
+    public boolean hasOwner(OfflinePlayer name) {
         return owners.contains(name);
     }
     
-    public boolean addOwner(String name) {
+    public boolean addOwner(OfflinePlayer name) {
         return owners.add(name);
     }
     
-    public List<String> getOwners() {
+    public List<OfflinePlayer> getOwners() {
         return owners;
     }
     
-    public boolean remove(String name) {
+    public boolean remove(OfflinePlayer name) {
         if (!owners.remove(name))
             return members.remove(name) != null;
         else
@@ -166,7 +167,7 @@ public class SuperRegion {
     
     public int getPopulation() {
         int membersSize = 0;
-        for (String s : members.keySet()) {
+        for (OfflinePlayer s : members.keySet()) {
             if (members.get(s).contains("member")) {
                 membersSize += 1;
             }

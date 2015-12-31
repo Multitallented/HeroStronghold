@@ -2,6 +2,8 @@ package multitallented.redcastlemedia.bukkit.townships.listeners;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
@@ -12,6 +14,7 @@ import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,7 +48,7 @@ public class RegionBlockListener implements Listener {
         for (SuperRegion sr : regionManager.getContainingSuperRegions(loc)) {
             SuperRegionType currentRegionType = regionManager.getSuperRegionType(sr.getType());
             Player player = event.getPlayer();
-            if ((player == null || (!sr.hasOwner(player.getName()) && !sr.hasMember(player.getName())))
+            if ((player == null || (!sr.hasOwner(player) && !sr.hasMember(player)))
                     && currentRegionType.hasEffect("deny_block_break") && regionManager.hasAllRequiredRegions(sr) &&
                     sr.getPower() > 0 && sr.getBalance() > 0) {
                 event.setCancelled(true);
@@ -54,7 +57,7 @@ public class RegionBlockListener implements Listener {
                 }
                 return;
             }
-            if ((player == null || (!sr.hasOwner(player.getName()) && !sr.hasMember(player.getName())))
+            if ((player == null || (!sr.hasOwner(player) && !sr.hasMember(player)))
                     && currentRegionType.hasEffect("deny_block_break_no_reagent")) {
                 event.setCancelled(true);
                 if (player != null) {
@@ -63,11 +66,6 @@ public class RegionBlockListener implements Listener {
                 return;
             }
             
-            boolean nullPlayer = player == null;
-            boolean member = false;
-            if (!nullPlayer) {
-                member = (sr.hasOwner(player.getName()) || sr.hasMember(player.getName()));
-            }
             boolean reqs = regionManager.hasAllRequiredRegions(sr);
             boolean hasPower = sr.getPower() > 0;
             boolean hasMoney = sr.getBalance() > 0;
@@ -82,7 +80,7 @@ public class RegionBlockListener implements Listener {
                     RegionType currentRegionType = regionManager.getRegionType(currentRegion.getType());
                     Player player = event.getPlayer();
                     Effect effect = new Effect(plugin);
-                    if ((player == null || (!currentRegion.isOwner(player.getName())))
+                    if ((player == null || (!currentRegion.isOwner(player)))
                             && effect.regionHasEffect(currentRegionType.getEffects(), "deny_block_break") != 0 && effect.hasReagents(currentLoc)) {
                         event.setCancelled(true);
                         if (player != null) {
@@ -90,7 +88,7 @@ public class RegionBlockListener implements Listener {
                         }
                         return;
                     }
-                    if ((player == null || !currentRegion.isOwner(player.getName()))
+                    if ((player == null || !currentRegion.isOwner(player))
                             && effect.regionHasEffect(currentRegionType.getEffects(), "deny_block_break_no_reagent") != 0) {
                         event.setCancelled(true);
                         if (player != null) {
@@ -99,14 +97,14 @@ public class RegionBlockListener implements Listener {
                         return;
                     }
                     if (activeSRDetected && effect.regionHasEffect(currentRegionType.getEffects(), "power_deny_block_break") != 0 &&
-                            (player == null || !currentRegion.isOwner(player.getName()))) {
+                            (player == null || !currentRegion.isOwner(player))) {
                         event.setCancelled(true);
                         if (player != null) {
                             player.sendMessage(ChatColor.GRAY + "[Townships] This region is protected");
                         }
                         return;
                     }
-                    if (currentRegionType != null && player != null && (Townships.getConfigManager().getSalvage() > 0 || currentRegionType.getSalvage() != 0) && r.isPrimaryOwner(player.getName())) {
+                    if (currentRegionType != null && player != null && (Townships.getConfigManager().getSalvage() > 0 || currentRegionType.getSalvage() != 0) && r.isPrimaryOwner(player)) {
                         NumberFormat formatter = NumberFormat.getCurrencyInstance();
                         double salvageValue = Townships.getConfigManager().getSalvage() * currentRegionType.getMoneyRequirement();
                         salvageValue = currentRegionType.getSalvage() != 0 ? currentRegionType.getSalvage() : salvageValue;
@@ -124,7 +122,7 @@ public class RegionBlockListener implements Listener {
                 RegionType currentRegionType = regionManager.getRegionType(currentRegion.getType());
                 Player player = event.getPlayer();
                 Effect effect = new Effect(plugin);
-                if ((player == null || (!currentRegion.isOwner(player.getName()) && !effect.isMemberOfRegion(player, currentLoc)))
+                if ((player == null || (!currentRegion.isOwner(player) && !effect.isMemberOfRegion(player, currentLoc)))
                         && effect.regionHasEffect(currentRegionType.getEffects(), "deny_block_break") != 0 && effect.hasReagents(currentLoc)) {
                     event.setCancelled(true);
                     if (player != null) {
@@ -132,7 +130,7 @@ public class RegionBlockListener implements Listener {
                     }
                     return;
                 }
-                if ((player == null || (!currentRegion.isOwner(player.getName()) && !effect.isMemberOfRegion(player, currentLoc)))
+                if ((player == null || (!currentRegion.isOwner(player) && !effect.isMemberOfRegion(player, currentLoc)))
                         && effect.regionHasEffect(currentRegionType.getEffects(), "deny_block_break_no_reagent") != 0) {
                     event.setCancelled(true);
                     if (player != null) {
@@ -140,11 +138,11 @@ public class RegionBlockListener implements Listener {
                     }
                     return;
                 }
-                TOItem toItem = new TOItem(loc.getBlock().getType(), loc.getBlock().getTypeId(), 1, loc.getBlock().getState().getData().toItemStack().getDurability());
-                ArrayList<ArrayList<TOItem>> reqMap = new ArrayList<ArrayList<TOItem>>();
+                TOItem toItem = new TOItem(loc.getBlock().getType(), 1, loc.getBlock().getState().getData().toItemStack().getDurability());
+                List<List<TOItem>> reqMap = new ArrayList<List<TOItem>>();
 
-                for (ArrayList<TOItem> currentStack : currentRegionType.getRequirements()) {
-                    ArrayList<TOItem> tempMap = new ArrayList<TOItem>();
+                for (List<TOItem> currentStack : currentRegionType.getRequirements()) {
+                    List<TOItem> tempMap = new ArrayList<TOItem>();
 
                     for (TOItem hsItem : currentStack) {
                         TOItem clone = hsItem.clone();
@@ -180,7 +178,7 @@ public class RegionBlockListener implements Listener {
                             
                             int p = 0;
                             boolean destroyIndex = false;
-                            outer1: for (ArrayList<TOItem> tempMap : reqMap) {
+                            outer1: for (List<TOItem> tempMap : reqMap) {
                                 for (TOItem item : tempMap) {
                                     if (item.getMat() == is.getType() && (item.isWildDamage() || item.damageMatches(is.getDurability()))) {
                                         if (item.getQty() < 2) {
@@ -205,7 +203,7 @@ public class RegionBlockListener implements Listener {
                 }
 
                 delete = !reqMap.isEmpty();
-                if (delete && (effect.isMemberOfRegion(player, r.getLocation()) || r.isOwner(player.getName()))) {
+                if (delete && (effect.isMemberOfRegion(player, r.getLocation()) || r.isOwner(player))) {
                     player.sendMessage(ChatColor.GRAY + "[Townships] Breaking this, would destroy your " + r.getType());
                     player.sendMessage(ChatColor.RED + "Missing requirements:");
                     for (String s : Util.hasCreationRequirements(r.getLocation(), currentRegionType, regionManager)) {
@@ -230,7 +228,7 @@ public class RegionBlockListener implements Listener {
     
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_block_build", true, 0));
         conditions.add(new RegionCondition("deny_block_build_no_reagent", false, 0));
         if (event.isCancelled() || !regionManager.shouldTakeAction(event.getBlock().getLocation(), event.getPlayer(), conditions)) {
@@ -246,7 +244,7 @@ public class RegionBlockListener implements Listener {
         if (event.isCancelled() || !event.getBlock().getType().equals(Material.CAKE_BLOCK))
             return;
         
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_block_break", true, 0));
         conditions.add(new RegionCondition("deny_block_break_no_reagent", false, 0));
         if (regionManager.shouldTakeAction(event.getBlock().getLocation(), event.getPlayer(), conditions)) {
@@ -260,7 +258,7 @@ public class RegionBlockListener implements Listener {
     
     @EventHandler
     public void onBlockFromTo(BlockFromToEvent event) {
-        if (event.isCancelled() || event.getBlock().getTypeId() == 0 ||
+        if (event.isCancelled() || event.getBlock().isEmpty() ||
                 regionManager.shouldTakeAction(event.getBlock().getLocation(), null, 0, "denyliquid", false)) {
             return;
         }
@@ -276,7 +274,7 @@ public class RegionBlockListener implements Listener {
             return;
         }
 
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_fire", true, 1));
         conditions.add(new RegionCondition("deny_fire_no_reagent", false, 1));
         IgniteCause cause = event.getCause();
@@ -290,7 +288,7 @@ public class RegionBlockListener implements Listener {
 
     @EventHandler
     public void onBlockBurn(BlockBurnEvent event) {
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_fire", true, 1));
         conditions.add(new RegionCondition("deny_fire_no_reagent", false, 1));
         if (event.isCancelled() || !regionManager.shouldTakeAction(event.getBlock().getLocation(), null, conditions)) {

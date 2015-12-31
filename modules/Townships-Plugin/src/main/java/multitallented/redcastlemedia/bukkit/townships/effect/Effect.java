@@ -1,6 +1,7 @@
 package multitallented.redcastlemedia.bukkit.townships.effect;
 
-import java.util.ArrayList;
+import java.util.List;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
 import multitallented.redcastlemedia.bukkit.townships.events.ToEvent;
@@ -12,9 +13,11 @@ import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
 import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
@@ -114,17 +117,17 @@ public class Effect {
      * arrowturrets use the number to determine arrow velocity. Conveyors use the
      * number as the item id that needs to be moved.
      * 
-     * @param effects regionManager.getRegionType(region.getType()).getEffects()
+     * @param list regionManager.getRegionType(region.getType()).getEffects()
      * @param name example: "denyblockbreak"
      * @return the number following the effect (returns 0 if doesn't have that effect)
      */
-    public int regionHasEffect(ArrayList<String> effects, String name) {
+    public int regionHasEffect(List<String> list, String name) {
         int data = 0;
-        if (effects == null || effects.isEmpty()) {
+        if (list == null || list.isEmpty()) {
             return 0;
         }
         
-        for (String effect : effects) {
+        for (String effect : list) {
             String[] params = effect.split("\\.");
             if (params.length > 1 && params[0].equalsIgnoreCase(name)) {
                 data = Integer.parseInt(params[1]);
@@ -151,7 +154,7 @@ public class Effect {
      */
     public int regionHasEffect(Region region, String name) {
         int data = 0;
-        ArrayList<String> effects = plugin.getRegionManager().getRegionType(region.getType()).getEffects();
+        List<String> effects = plugin.getRegionManager().getRegionType(region.getType()).getEffects();
         if (effects == null || effects.isEmpty())
             return 0;
         
@@ -182,7 +185,7 @@ public class Effect {
                     Math.floor(player.getLocation().getZ()));
             return false;
         }
-        return region.isOwner(player.getName());
+        return region.isOwner(player);
     }
     
     /**
@@ -211,41 +214,43 @@ public class Effect {
     public boolean isMemberOfRegion(Player player, Location location) throws NullPointerException {
         RegionManager rm = getPlugin().getRegionManager();
         Region r = rm.getRegion(location);
-        if (r.isMember(player.getName())) {
+        if (r.isMember(player)) {
             return true;
-        } else if (r.isMember("all")) {
+        } // TODO: revive this code
+        /* else if (r.isMember("all")) {
             return true;
         } else {
             for (String s : r.getMembers()) {
                 if (s.contains("sr:")) {
                     String superRegionName = s.replace("sr:", "");
                     SuperRegion sr = rm.getSuperRegion(superRegionName);
-                    if (sr != null && (sr.hasMember(player.getName()) || sr.hasOwner(player.getName()))) {
+                    if (sr != null && (sr.hasMember(player) || sr.hasOwner(player))) {
                         return true;
                     }
                 }
             }
-        }
+        } */
         return false;
     }
 
     public static boolean isMemberRegion(Player player, Location location, RegionManager rm) {
         Region r = rm.getRegion(location);
-        if (r.isMember(player.getName())) {
+        if (r.isMember(player)) {
             return true;
-        } else if (r.isMember("all")) {
+        } // TODO: revive this code
+        /* else if (r.isMember("all")) {
             return true;
         } else {
             for (String s : r.getMembers()) {
                 if (s.contains("sr:")) {
                     String superRegionName = s.replace("sr:", "");
                     SuperRegion sr = rm.getSuperRegion(superRegionName);
-                    if (sr != null && (sr.hasMember(player.getName()) || sr.hasOwner(player.getName()))) {
+                    if (sr != null && (sr.hasMember(player) || sr.hasOwner(player))) {
                         return true;
                     }
                 }
             }
-        }
+        } */
         return false;
     }
     
@@ -285,7 +290,7 @@ public class Effect {
 
 
         if (rt.getPowerDrain() != 0) {
-            ArrayList<SuperRegion> srs = rm.getContainingSuperRegions(r.getLocation());
+            List<SuperRegion> srs = rm.getContainingSuperRegions(r.getLocation());
             if (srs.isEmpty()) {
                 return false;
             }
@@ -357,7 +362,7 @@ public class Effect {
         }*/
         
         //Check and remove money from the player
-        String playername = "";
+        OfflinePlayer playername;
         try {
             playername = r.getOwners().get(0);
         } catch (IndexOutOfBoundsException ioobe) {
@@ -371,7 +376,7 @@ public class Effect {
         }
         
         if (rt.getPowerDrain() != 0) {
-            ArrayList<SuperRegion> srs = rm.getContainingSuperRegions(location);
+            List<SuperRegion> srs = rm.getContainingSuperRegions(location);
             if (srs.isEmpty()) {
                 return;
             }
@@ -452,7 +457,7 @@ public class Effect {
         }*/
         
         //Check and remove money from the player
-        String playername = "";
+        OfflinePlayer playername;
         try {
             playername = r.getOwners().get(0);
         } catch (IndexOutOfBoundsException ioobe) {
@@ -466,7 +471,7 @@ public class Effect {
         }
         
         if (rt.getPowerDrain() != 0) {
-            ArrayList<SuperRegion> srs = rm.getContainingSuperRegions(l);
+            List<SuperRegion> srs = rm.getContainingSuperRegions(l);
             if (srs.isEmpty()) {
                 return;
             }
@@ -545,7 +550,7 @@ public class Effect {
         
         
         //Check and remove money from the player
-        String playername = "";
+        OfflinePlayer playername;
         try {
             playername = r.getOwners().get(0);
         } catch (IndexOutOfBoundsException ioobe) {
@@ -563,7 +568,7 @@ public class Effect {
         }
         
         if (rt.getPowerDrain() != 0) {
-            ArrayList<SuperRegion> srs = rm.getContainingSuperRegions(location);
+            List<SuperRegion> srs = rm.getContainingSuperRegions(location);
             if (srs.isEmpty()) {
                 return false;
             }
@@ -644,7 +649,7 @@ public class Effect {
         
         
         //Check and remove money from the player
-        String playername = "";
+        OfflinePlayer playername;
         try {
             playername = r.getOwners().get(0);
         } catch (IndexOutOfBoundsException ioobe) {
@@ -662,7 +667,7 @@ public class Effect {
         }
         
         if (rt.getPowerDrain() != 0) {
-            ArrayList<SuperRegion> srs = rm.getContainingSuperRegions(l);
+            List<SuperRegion> srs = rm.getContainingSuperRegions(l);
             if (srs.isEmpty()) {
                 return false;
             }

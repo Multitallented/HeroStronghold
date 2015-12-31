@@ -14,6 +14,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -122,8 +123,8 @@ public class EffectEvolve extends Effect {
             //If reached, evolve the region
             //If not, check if needs to be saved
             if (upkeeps.get(r) >= evolve) {
-                for (String s : r.getOwners()) {
-                    Player player = Bukkit.getPlayer(s);
+                for (OfflinePlayer s : r.getOwners()) {
+                    Player player = s.getPlayer();
                     if (player != null) {
                         player.sendMessage(ChatColor.GRAY + "[Townships] " + ChatColor.WHITE + "Your " + 
                                 ChatColor.RED + WordUtils.capitalize(r.getType()) + 
@@ -136,12 +137,12 @@ public class EffectEvolve extends Effect {
                 }
                 
                 
-                //ArrayList<Location> regions = event.getEvent().getRegionsToDestroy();
+                //List<Location> regions = event.getEvent().getRegionsToDestroy();
                 //regions.add(l);
                 //event.getEvent().setRegionsToDestroy(regions);
-                //ArrayList<Region> cRegions = event.getEvent().getRegionsToCreate();
-                //ArrayList<String> owners = r.getOwners();
-                //ArrayList<String> members = r.getMembers();
+                //List<Region> cRegions = event.getEvent().getRegionsToCreate();
+                //List<String> owners = r.getOwners();
+                //List<String> members = r.getMembers();
                 //cRegions.add(new Region(r.getID(), l, evolveTarget, owners, members));
                 //event.getEvent().setRegionsToCreate(cRegions);
                 
@@ -161,8 +162,8 @@ public class EffectEvolve extends Effect {
                 
                 upkeeps.remove(r);
                 lastSave.remove(r);
-                for (String s : r.getOwners()) {
-                    Player player = Bukkit.getPlayer(s);
+                for (OfflinePlayer s : r.getOwners()) {
+                    Player player = s.getPlayer();
                     if (player != null) {
                         player.sendMessage(ChatColor.GRAY + "[Townships] " + ChatColor.WHITE + "Your " + 
                                 ChatColor.RED + WordUtils.capitalize(r.getType()) + 

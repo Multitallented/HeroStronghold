@@ -57,7 +57,7 @@ public class EffectPermission extends Effect {
             }
             
             if (permission.startsWith("o:")) {
-                if (!sr.hasOwner(event.getPlayer().getName())) {
+                if (!sr.hasOwner(event.getPlayer())) {
                     return;
                 }
                 

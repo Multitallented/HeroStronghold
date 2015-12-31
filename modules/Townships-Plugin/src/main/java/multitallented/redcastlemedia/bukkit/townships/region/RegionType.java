@@ -1,8 +1,8 @@
 package multitallented.redcastlemedia.bukkit.townships.region;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -17,11 +17,11 @@ public class RegionType {
     private final double rawBuildRadius;
     private final double rawRadius;
 
-    private final ArrayList<ArrayList<TOItem>> requirements;
-    private final ArrayList<ArrayList<TOItem>> reagents;
-    private final ArrayList<ArrayList<TOItem>> input;
-    private final ArrayList<ArrayList<TOItem>> output;
-    private final ArrayList<String> effects;
+    private final List<List<TOItem>> requirements;
+    private final List<List<TOItem>> reagents;
+    private final List<List<TOItem>> input;
+    private final List<List<TOItem>> output;
+    private final List<String> effects;
 
     private final double moneyRequirement;
     private final double moneyOutput;
@@ -36,17 +36,17 @@ public class RegionType {
     private final int minY;
     private final int maxY;
     private final double unlockCost;
-    private final HashMap<String, ArrayList<String>> namedItems;
+    private final HashMap<String, List<String>> namedItems;
     private final double salvageValue;
     
     
-    public RegionType(String name, String group, ArrayList<String> effects,
-            double radius, double buildRadius, ArrayList<ArrayList<TOItem>> requirements, List<String> superRegions,
-            ArrayList<ArrayList<TOItem>> reagents, ArrayList<ArrayList<TOItem>> upkeep,
-            ArrayList<ArrayList<TOItem>> output, double moneyRequirement, double moneyOutput, double exp,
+    public RegionType(String name, String group, List<String> effects,
+            double radius, double buildRadius, List<List<TOItem>> requirements, List<String> superRegions,
+            List<List<TOItem>> reagents, List<List<TOItem>> upkeep,
+            List<List<TOItem>> output, double moneyRequirement, double moneyOutput, double exp,
             String description, int powerDrain,
             int housing, List<String> biome, ItemStack icon, int minY, int maxY, double unlockCost,
-            double salvageValue, HashMap<String, ArrayList<String>> namedItems) {
+            double salvageValue, HashMap<String, List<String>> namedItems) {
         this.name = name;
         this.group = group;
         this.effects = effects;
@@ -78,7 +78,7 @@ public class RegionType {
         return salvageValue;
     }
     
-    public HashMap<String, ArrayList<String>> getNamedItems() {
+    public HashMap<String, List<String>> getNamedItems() {
         return namedItems;
     }
     
@@ -137,11 +137,11 @@ public class RegionType {
         return name;
     }
     
-    public ArrayList<ArrayList<TOItem>> getReagents() {
+    public List<List<TOItem>> getReagents() {
         return reagents;
     }
     
-    public ArrayList<ArrayList<TOItem>> getRequirements() {
+    public List<List<TOItem>> getRequirements() {
         return requirements;
     }
     
@@ -149,11 +149,11 @@ public class RegionType {
         return moneyRequirement;
     }
     
-    public ArrayList<String> getEffects() {
+    public List<String> getEffects() {
         return effects;
     }
     
-    public ArrayList<ArrayList<TOItem>> getUpkeep() {
+    public List<List<TOItem>> getUpkeep() {
         return input;
     }
     
@@ -161,7 +161,7 @@ public class RegionType {
         return moneyOutput;
     }
     
-    public ArrayList<ArrayList<TOItem>> getOutput() {
+    public List<List<TOItem>> getOutput() {
         return output;
     }
 

@@ -1,7 +1,10 @@
 package multitallented.redcastlemedia.bukkit.townships.events;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
+
 import org.bukkit.Location;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,8 +17,8 @@ public class ToTwoSecondEffectEvent extends Event implements ToEvent {
 
     private static final HandlerList handlers = new HandlerList();
     private final Region re;
-    private ArrayList<Location> destroyRegions = new ArrayList<Location>();
-    private ArrayList<Region> createRegions = new ArrayList<Region>();
+    private List<Location> destroyRegions = new ArrayList<Location>();
+    private List<Region> createRegions = new ArrayList<Region>();
     private final String[] effect;
 
     public ToTwoSecondEffectEvent(Region re, String[] effect) {
@@ -28,12 +31,12 @@ public class ToTwoSecondEffectEvent extends Event implements ToEvent {
     }
     
     @Override
-    public void setRegionsToCreate(ArrayList<Region> newRegions) {
+    public void setRegionsToCreate(List<Region> newRegions) {
         this.createRegions = newRegions;
     }
     
     @Override
-    public ArrayList<Region> getRegionsToCreate() {
+    public List<Region> getRegionsToCreate() {
         return createRegions;
     }
     
@@ -47,12 +50,12 @@ public class ToTwoSecondEffectEvent extends Event implements ToEvent {
     }
     
     @Override
-    public ArrayList<Location> getRegionsToDestroy() {
+    public List<Location> getRegionsToDestroy() {
         return destroyRegions;
     }
     
     @Override
-    public void setRegionsToDestroy(ArrayList<Location> r) {
+    public void setRegionsToDestroy(List<Location> r) {
         this.destroyRegions = r;
     }
 

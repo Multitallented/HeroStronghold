@@ -1,6 +1,6 @@
 package multitallented.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
@@ -112,7 +112,7 @@ public class EffectRepulse extends Effect {
                 return;
             }
             
-            ArrayList<SuperRegion> containingSR = rm.getContainingSuperRegions(event.getRegion().getLocation());
+            List<SuperRegion> containingSR = rm.getContainingSuperRegions(event.getRegion().getLocation());
             
             for (Player p : Bukkit.getOnlinePlayers()) {
                 for (SuperRegion sr : rm.getContainingSuperRegions(p.getLocation())) {
@@ -120,7 +120,7 @@ public class EffectRepulse extends Effect {
                         break;
                     }
                     
-                    if (sr.hasMember(p.getName()) || sr.hasOwner(p.getName())) {
+                    if (sr.hasMember(p) || sr.hasOwner(p)) {
                         break;
                     }
 

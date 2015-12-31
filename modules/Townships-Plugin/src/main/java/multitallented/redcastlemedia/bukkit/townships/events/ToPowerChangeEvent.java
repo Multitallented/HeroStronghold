@@ -1,8 +1,11 @@
 package multitallented.redcastlemedia.bukkit.townships.events;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
+
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -14,8 +17,8 @@ import org.bukkit.event.HandlerList;
  */
 public class ToPowerChangeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private ArrayList<Location> destroyRegions = new ArrayList<Location>();
-    private ArrayList<Region> createRegions = new ArrayList<Region>();
+    private List<Location> destroyRegions = new ArrayList<Location>();
+    private List<Region> createRegions = new ArrayList<Region>();
     private boolean cancelled;
     private final SuperRegion sr;
     private final int oldPower;

@@ -1,12 +1,15 @@
 package multitallented.redcastlemedia.bukkit.townships.checkregiontask;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import multitallented.redcastlemedia.bukkit.townships.events.ToEvent;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerEnterRegionEvent;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerExitRegionEvent;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerInRegionEvent;
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -31,14 +34,14 @@ public class CheckPlayerInRegionThread {
     }
 
     public void go() {
-        ArrayList<Region> containedRegions = rm.getContainingRegions(loc);
+        List<Region> containedRegions = rm.getContainingRegions(loc);
 
         for (Region re : containedRegions) {
             ToPlayerInRegionEvent pIREvent = new ToPlayerInRegionEvent(re.getLocation(), p);
             callEvent(pIREvent);
         }
 
-        ArrayList<Region> previousRegions = crt.lastRegion.get(p.getName());
+        List<Region> previousRegions = crt.lastRegion.get(p.getName());
         if (previousRegions == null) {
             previousRegions = new ArrayList<Region>();
         }

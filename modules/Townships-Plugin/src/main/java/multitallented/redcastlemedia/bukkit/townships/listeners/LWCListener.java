@@ -2,8 +2,6 @@ package multitallented.redcastlemedia.bukkit.townships.listeners;
 
 import com.griefcraft.lwc.LWC;
 import com.griefcraft.scripting.JavaModule;
-import com.griefcraft.scripting.Module;
-import com.griefcraft.scripting.event.LWCBlockInteractEvent;
 import com.griefcraft.scripting.event.LWCProtectionRegisterEvent;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
@@ -48,7 +46,7 @@ public class LWCListener extends JavaModule {
                 return;
             }
 
-            if (!(r.isOwner(player.getName()) || Effect.isMemberRegion(player, r.getLocation(), rm))) {
+            if (!(r.isOwner(player) || Effect.isMemberRegion(player, r.getLocation(), rm))) {
                 player.sendMessage("[Townships] You can't protect a someone else's region");
                 lwc.removeModes(player);
                 event.setCancelled(true);
@@ -56,7 +54,7 @@ public class LWCListener extends JavaModule {
             }
         }
         for (SuperRegion sr : rm.getContainingSuperRegions(block.getLocation())) {
-            if (!(sr.hasOwner(player.getName()) || sr.hasMember(player.getName()))) {
+            if (!(sr.hasOwner(player) || sr.hasMember(player))) {
                 player.sendMessage("[Townships] You can't protect a someone else's super region");
                 lwc.removeModes(player);
                 event.setCancelled(true);

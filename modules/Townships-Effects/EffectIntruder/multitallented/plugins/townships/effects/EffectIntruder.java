@@ -57,7 +57,7 @@ public class EffectIntruder extends Effect {
                 return;
             }
 
-            if (sr.hasOwner(event.getPlayer().getName()) || sr.hasMember(event.getPlayer().getName())) {
+            if (sr.hasOwner(event.getPlayer()) || sr.hasMember(event.getPlayer())) {
                 return;
             }
 
@@ -86,7 +86,7 @@ public class EffectIntruder extends Effect {
             if (sr == null) {
                 return;
             }
-            if (sr.hasOwner(event.getPlayer().getName()) || sr.hasMember(event.getPlayer().getName())) {
+            if (sr.hasOwner(event.getPlayer()) || sr.hasMember(event.getPlayer())) {
                 return;
             }
 
@@ -139,7 +139,7 @@ public class EffectIntruder extends Effect {
             }
 
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (sr.hasMember(p.getName()) || sr.hasOwner(p.getName())) {
+                if (sr.hasMember(p) || sr.hasOwner(p)) {
                     p.sendMessage(message);
                 }
             }

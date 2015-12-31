@@ -1,6 +1,7 @@
 package multitallented.plugins.townships.effects;
 
 import java.io.File;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -97,7 +98,7 @@ public class EffectDenyCommand extends Effect {
             
             //Check Location
             for (Region r : plugin.getRegionManager().getContainingRegions(p.getLocation())) {
-                if (r.isMember(p.getName()) || r.isOwner(p.getName())) {
+                if (r.isMember(p) || r.isOwner(p)) {
                     continue;
                 }
                 int denyCommand = effect.regionHasEffect(plugin.getRegionManager().getRegionType(r.getType()).getEffects(), "deny_command");

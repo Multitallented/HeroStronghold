@@ -7,12 +7,15 @@ package multitallented.redcastlemedia.bukkit.townships.listeners.guis;
  */
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
+
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,18 +31,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class RequirementsGUIListener implements Listener {
     private static Townships to;
     public RequirementsGUIListener(Townships to) {
-        this.to = to;
+        RequirementsGUIListener.to = to;
     }
     
-    public static void openRequirementsInventory(ArrayList<ArrayList<TOItem>> items,
+    public static void openRequirementsInventory(List<List<TOItem>> List,
                                                  Player player,
                                                  String title,
                                                  String back) {
         int index = 0;
         HashMap<Integer, TOItem> proxyInv = new HashMap<Integer, TOItem>();
-        HashMap<Integer, ArrayList<TOItem>> cycleItems = new HashMap<Integer, ArrayList<TOItem>>();
+        HashMap<Integer, List<TOItem>> cycleItems = new HashMap<Integer, List<TOItem>>();
         
-        for (ArrayList<TOItem> subItems : items) {
+        for (List<TOItem> subItems : List) {
             if (subItems.size() == 1) {
                 TOItem item = subItems.get(0);
                 int qty = item.getQty();
@@ -73,7 +76,7 @@ public class RequirementsGUIListener implements Listener {
                     TOItem tempItem = item.clone();
                     tempItem.setQty(maxStack);
                     proxyInv.put(index, tempItem);
-                    ArrayList<TOItem> tempListItems = new ArrayList<TOItem>();
+                    List<TOItem> tempListItems = new ArrayList<TOItem>();
                     tempListItems.add(tempItem);
                     cycleItems.put(baseIndex + baseIndexOffset, tempListItems);
                     index++;
@@ -85,7 +88,7 @@ public class RequirementsGUIListener implements Listener {
                 TOItem tempItem = item.clone();
                 tempItem.setQty(qty);
                 proxyInv.put(index, tempItem);
-                ArrayList<TOItem> tempListItems = new ArrayList<TOItem>();
+                List<TOItem> tempListItems = new ArrayList<TOItem>();
                 tempListItems.add(tempItem);
                 cycleItems.put(baseIndex + baseIndexOffset, tempListItems);
                 index++;
@@ -112,7 +115,7 @@ public class RequirementsGUIListener implements Listener {
                         TOItem clone = currItem.clone();
                         clone.setQty(cMaxStack);
                         
-                        ArrayList<TOItem> subCycleList = cycleItems.get(baseIndex + baseIndexOffset);
+                        List<TOItem> subCycleList = cycleItems.get(baseIndex + baseIndexOffset);
                         while (subCycleList.size() < reqIndex + 1) {
                             subCycleList.add(new TOItem(Material.AIR, 0, 0));
                         }
@@ -125,7 +128,7 @@ public class RequirementsGUIListener implements Listener {
                         cycleItems.put(baseIndex + baseIndexOffset, new ArrayList<TOItem>());
                     }
                     
-                    ArrayList<TOItem> subCycleList = cycleItems.get(baseIndex + baseIndexOffset);
+                    List<TOItem> subCycleList = cycleItems.get(baseIndex + baseIndexOffset);
                     while (subCycleList.size() < reqIndex + 1) {
                         subCycleList.add(new TOItem(Material.AIR, 0, 0));
                     }
@@ -141,7 +144,7 @@ public class RequirementsGUIListener implements Listener {
                     reqIndex++;
                 }
                 for (int k = 0; k< orMax; k++) {
-                    ArrayList<TOItem> subCycleList = cycleItems.get(baseIndex + k);
+                    List<TOItem> subCycleList = cycleItems.get(baseIndex + k);
                     while (subCycleList.size() < reqIndex) {
                         subCycleList.add(new TOItem(Material.AIR, 0, 0));
                     }
@@ -168,7 +171,7 @@ public class RequirementsGUIListener implements Listener {
             ItemStack iconStack = new ItemStack(rt.getIcon());
             ItemMeta iconMeta = iconStack.getItemMeta();
             iconMeta.setDisplayName(rt.getName());
-            ArrayList<String> lore = new ArrayList<String>();
+            List<String> lore = new ArrayList<String>();
             int diameter = (int) (Math.floor(rt.getRawRadius()) * 2 + 1);
             String sizeString = diameter + "x" + diameter;
             lore.add(ChatColor.RESET + "" + ChatColor.RED + "Size: " + sizeString);
@@ -184,7 +187,7 @@ public class RequirementsGUIListener implements Listener {
                 ItemStack iconStack = new ItemStack(srt.getIcon());
                 ItemMeta iconMeta = iconStack.getItemMeta();
                 iconMeta.setDisplayName(srt.getName());
-                ArrayList<String> lore = new ArrayList<String>();
+                List<String> lore = new ArrayList<String>();
                 int diameter = (int) (Math.floor(srt.getRawRadius()) * 2 + 1);
                 String sizeString = diameter + "x" + diameter;
                 lore.add(ChatColor.RESET + "" + ChatColor.RED + "Size: " + sizeString);
@@ -199,7 +202,7 @@ public class RequirementsGUIListener implements Listener {
         ItemStack backStack = new ItemStack(Material.REDSTONE_BLOCK);
         ItemMeta backMeta = backStack.getItemMeta();
         backMeta.setDisplayName(ChatColor.RESET + "" + ChatColor.GOLD + "Press to go BACK");
-        ArrayList<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<String>();
         lore = new ArrayList<String>();
         lore.add(back);
         backMeta.setLore(lore);

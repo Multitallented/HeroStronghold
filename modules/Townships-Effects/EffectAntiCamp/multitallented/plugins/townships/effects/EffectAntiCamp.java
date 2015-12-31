@@ -1,5 +1,6 @@
 package multitallented.plugins.townships.effects;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
@@ -107,7 +108,7 @@ public class EffectAntiCamp extends Effect {
             }
 
             //If they died outside of a super region then I don't care
-            ArrayList<SuperRegion> superRegions = rm.getContainingSuperRegions(player.getLocation());
+            List<SuperRegion> superRegions = rm.getContainingSuperRegions(player.getLocation());
             if (superRegions.isEmpty()) {
                 return;
             }
@@ -130,7 +131,7 @@ public class EffectAntiCamp extends Effect {
                 }
 
                 //If the person dying was a member, then increment their deathCount
-                if (sr.hasOwner(player.getName()) || sr.hasMember(player.getName())) {
+                if (sr.hasOwner(player) || sr.hasMember(player)) {
                     if (deathCounts.containsKey(player.getName())) {
                         deathCounts.put(player.getName(), deathCounts.get(player.getName()) + 1);
                     } else {
@@ -147,7 +148,7 @@ public class EffectAntiCamp extends Effect {
             RegionManager rm = plugin.getRegionManager();
 
             //Activate poison
-            ArrayList<String> removeMeDeathCounts = new ArrayList<String>();
+            List<String> removeMeDeathCounts = new ArrayList<String>();
 
             //Go through everyone who has died in their own town
             for (String name : deathCounts.keySet()) {
@@ -192,7 +193,7 @@ public class EffectAntiCamp extends Effect {
             }
 
             //Deal Poison Damage
-            ArrayList<String> removeMePoison = new ArrayList<String>();
+            List<String> removeMePoison = new ArrayList<String>();
             for (String srName : lastPoison.keySet()) {
 
                 Long lastPoisonTime = lastPoison.get(srName);
@@ -232,13 +233,13 @@ public class EffectAntiCamp extends Effect {
                 }
 
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    ArrayList<SuperRegion> containingSR = rm.getContainingSuperRegions(p.getLocation());
+                    List<SuperRegion> containingSR = rm.getContainingSuperRegions(p.getLocation());
                     for (SuperRegion r : rm.getContainingSuperRegions(p.getLocation())) {
                         if (!containingSR.contains(r)) {
                             break;
                         }
 
-                        if (sr.hasMember(p.getName()) || sr.hasOwner(p.getName())) {
+                        if (sr.hasMember(p) || sr.hasOwner(p)) {
                             break;
                         }
 

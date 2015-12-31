@@ -1,10 +1,12 @@
 package multitallented.redcastlemedia.bukkit.townships.listeners;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
 import multitallented.redcastlemedia.bukkit.townships.ConfigManager;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
@@ -13,11 +15,11 @@ import multitallented.redcastlemedia.bukkit.townships.region.Region;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionCondition;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,9 +30,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
-import org.bukkit.event.painting.PaintingBreakByEntityEvent;
-import org.bukkit.event.painting.PaintingBreakEvent;
-import org.bukkit.event.painting.PaintingPlaceEvent;
+import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 /**
@@ -71,7 +71,6 @@ public class RegionEntityListener implements Listener {
             return;
         }        
         Player dPlayer = (Player) d;
-        String dPlayername = dPlayer.getName();
         int powerLoss = cm.getPowerPerKill();
         
         Player player = (Player) event.getEntity();
@@ -84,15 +83,14 @@ public class RegionEntityListener implements Listener {
             powerLoss = 0;
         }
         lastDeath.put(player.getName(), currentTime);
-        
-        String playername = player.getName();
+
         if (cm.getUseWar() && powerLoss > 0) {
             HashSet<SuperRegion> tempSet = new HashSet<SuperRegion>();
             HashSet<SuperRegion> dTempSet = new HashSet<SuperRegion>();
             for (SuperRegion sr : rm.getSortedSuperRegions()) {
-                if (sr.hasMember(playername) || sr.hasOwner(playername)) {
+                if (sr.hasMember(player) || sr.hasOwner(player)) {
                     tempSet.add(sr);
-                } else if (sr.hasMember(dPlayername) || sr.hasOwner(dPlayername)) {
+                } else if (sr.hasMember(dPlayer) || sr.hasOwner(dPlayer)) {
                     dTempSet.add(sr);
                 }
             }
@@ -116,7 +114,7 @@ public class RegionEntityListener implements Listener {
             Set<String> regionsToReduce = new HashSet<String>();
             for (String s : rm.getSuperRegionNames()) {
                 SuperRegion sr = rm.getSuperRegion(s);
-                if (sr.hasMember(playername) || sr.hasOwner(playername))
+                if (sr.hasMember(player) || sr.hasOwner(player))
                     regionsToReduce.add(s);
             }
             if (!regionsToReduce.isEmpty()) {
@@ -144,7 +142,7 @@ public class RegionEntityListener implements Listener {
         }
         
         if (event.getEntity() instanceof ItemFrame) {
-            ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+            List<RegionCondition> conditions = new ArrayList<RegionCondition>();
             conditions.add(new RegionCondition("deny_block_break", true, 0));
             conditions.add(new RegionCondition("deny_block_break_no_reagent", false, 0));
             Player player = null;
@@ -161,7 +159,7 @@ public class RegionEntityListener implements Listener {
         }
 
         if (event.getEntity() instanceof Animals) {
-            ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+            List<RegionCondition> conditions = new ArrayList<RegionCondition>();
             conditions.add(new RegionCondition("deny_animal_damage", true, 0));
             conditions.add(new RegionCondition("deny_animal_damage_no_reagent", false, 0));
             Player player = null;
@@ -177,7 +175,7 @@ public class RegionEntityListener implements Listener {
             return;
         }
         if (event.getEntity() instanceof Villager || event.getEntity() instanceof IronGolem) {
-            ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+            List<RegionCondition> conditions = new ArrayList<RegionCondition>();
             conditions.add(new RegionCondition("deny_villager_damage", true, 0));
             conditions.add(new RegionCondition("deny_villager_damage_no_reagent", false, 0));
             Player player = null;
@@ -228,7 +226,7 @@ public class RegionEntityListener implements Listener {
         for (SuperRegion sr : rm.getContainingSuperRegions(loc)) {
             boolean notMember = player == null;
             if (!notMember) {
-                notMember = !(sr.hasOwner(player.getName()) || sr.hasMember(player.getName()));
+                notMember = !(sr.hasOwner(player) || sr.hasMember(player));
             }
             boolean reqs = rm.hasAllRequiredRegions(sr);
             boolean hasEffect = rm.getSuperRegionType(sr.getType()).hasEffect("deny_pvp");
@@ -239,7 +237,7 @@ public class RegionEntityListener implements Listener {
             boolean atWar = rm.isAtWar(player, dPlayer);
             boolean hasPower = sr.getPower() > 0;
             boolean hasMoney = sr.getBalance() > 0;
-            boolean bothMembers = !notMember && (sr.hasMember(dPlayer.getName()) || sr.hasOwner(dPlayer.getName()));
+            boolean bothMembers = !notMember && (sr.hasMember(dPlayer) || sr.hasOwner(dPlayer));
             if (!isInCombat && (hasEffect1 || (hasEffect && reqs && hasPower && hasMoney && !atWar))) {
                 dPlayer.sendMessage(ChatColor.RED + "[Townships] " + player.getDisplayName() + " is protected in this region.");
                 event.setCancelled(true);
@@ -254,8 +252,8 @@ public class RegionEntityListener implements Listener {
         }
         for (Region r : rm.getContainingRegions(loc)) {
             Effect effect = new Effect(plugin);
-            boolean member = r.isMember(player.getName()) || r.isOwner(player.getName());
-            boolean bothMembers = member && (r.isMember(dPlayer.getName()) || r.isOwner(dPlayer.getName()));
+            boolean member = r.isMember(player) || r.isOwner(player);
+            boolean bothMembers = member && (r.isMember(dPlayer) || r.isOwner(dPlayer));
             boolean hasEffect = effect.regionHasEffect(rm.getRegionType(r.getType()).getEffects(), "deny_pvp") > 0;
             boolean hasEffect1 = effect.regionHasEffect(rm.getRegionType(r.getType()).getEffects(), "deny_pvp_no_reagent") > 0;
             boolean hasEffect2 = effect.regionHasEffect(rm.getRegionType(r.getType()).getEffects(), "deny_friendly_fire") > 0;
@@ -275,9 +273,9 @@ public class RegionEntityListener implements Listener {
     }
     
     @EventHandler
-    public void onPaintingPlace(PaintingPlaceEvent event) {
-        if ((event.isCancelled() || !rm.shouldTakeAction(event.getPainting().getLocation(), event.getPlayer(), 0, "deny_block_build", true))  &&
-                (event.isCancelled() || !rm.shouldTakeAction(event.getPainting().getLocation(), event.getPlayer(), 0, "deny_block_build_no_reagent", false))) {
+    public void onPaintingPlace(HangingPlaceEvent event) {
+        if ((event.isCancelled() || !rm.shouldTakeAction(event.getEntity().getLocation(), event.getPlayer(), 0, "deny_block_build", true))  &&
+                (event.isCancelled() || !rm.shouldTakeAction(event.getEntity().getLocation(), event.getPlayer(), 0, "deny_block_build_no_reagent", false))) {
             return;
         }
 
@@ -286,15 +284,15 @@ public class RegionEntityListener implements Listener {
     }
 
     @EventHandler
-    public void onPaintingBreak(PaintingBreakEvent event) {
-        if (event.isCancelled() || !(event instanceof PaintingBreakByEntityEvent))
+    public void onPaintingBreak(HangingBreakEvent event) {
+        if (event.isCancelled() || !(event instanceof HangingBreakByEntityEvent))
             return;
-        PaintingBreakByEntityEvent pEvent = (PaintingBreakByEntityEvent) event;
+        HangingBreakByEntityEvent pEvent = (HangingBreakByEntityEvent) event;
         if (!(pEvent.getRemover() instanceof Player))
             return;
         Player player = (Player) pEvent.getRemover();
-        if ((!rm.shouldTakeAction(event.getPainting().getLocation(), player, 0, "deny_block_break", true)) && 
-                (!rm.shouldTakeAction(event.getPainting().getLocation(), player, 0, "deny_block_break_no_reagent", false))) {
+        if ((!rm.shouldTakeAction(event.getEntity().getLocation(), player, 0, "deny_block_break", true)) && 
+                (!rm.shouldTakeAction(event.getEntity().getLocation(), player, 0, "deny_block_break_no_reagent", false))) {
             return;
         }
 
@@ -320,7 +318,7 @@ public class RegionEntityListener implements Listener {
                 player = (Player) removerEntity;
             }
         }
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_block_break", true, 0));
         conditions.add(new RegionCondition("deny_block_break_no_reagent", false, 0));
 
@@ -343,7 +341,7 @@ public class RegionEntityListener implements Listener {
         if (event.isCancelled() && !Townships.getConfigManager().getExplosionOverride()) {
             return;
         }
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_explosion", true, 5));
         conditions.add(new RegionCondition("deny_explosion_no_reagent", false, 5));
         if (event.getEntity() == null) {
@@ -369,7 +367,7 @@ public class RegionEntityListener implements Listener {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
             @Override
             public void run() {
-                ArrayList<Location> tempArray = new ArrayList<Location>();
+                List<Location> tempArray = new ArrayList<Location>();
                 for (Region r : rm.getContainingBuildRegions(loc, 5)) {
                     if (!Util.hasRequiredBlocks(r, rm)) {
                         tempArray.add(r.getLocation());

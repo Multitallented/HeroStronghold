@@ -1,6 +1,6 @@
 package multitallented.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerInRegionEvent;
@@ -39,7 +39,7 @@ public class EffectGainStamina extends Effect {
                 return;
             
             Location l = event.getLocation();
-            ArrayList<String> effects = effect.rm.getRegionType(effect.rm.getRegion(l).getType()).getEffects();
+            List<String> effects = effect.rm.getRegionType(effect.rm.getRegion(l).getType()).getEffects();
             //Check if the region has the shoot arrow effect and return arrow velocity
             int food = effect.regionHasEffect(effects, "gain_stamina");
             if (food == 0)

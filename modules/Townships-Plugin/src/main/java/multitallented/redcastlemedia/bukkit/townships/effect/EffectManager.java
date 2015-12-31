@@ -8,13 +8,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 
 /**
@@ -122,20 +123,6 @@ public class EffectManager {
                 effects.put(entry.getKey(),effect);
             }
         }
-    }
-    
-    private boolean loadEffect(String name) {
-        // If the skill is already loaded, don't try to load it
-        if (hasEffect(name))
-            return true;
-
-        // Lets try loading the skill file
-        Effect effect = loadEffect(effectFiles.get(name.toLowerCase()));
-        if (effect == null)
-            return false;
-
-        effects.put(name, effect);
-        return true;
     }
     
 }

@@ -3,9 +3,12 @@ package multitallented.redcastlemedia.bukkit.townships.listeners;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
+
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -49,16 +52,16 @@ public class SendMessageThread implements Runnable {
         }*/
         SuperRegion sr = plugin.getRegionManager().getSuperRegion(channel);
         if (sr != null) {
-            for (String s : sr.getMembers().keySet()) {
-                Player p = plugin.getServer().getPlayer(s);
+            for (OfflinePlayer s : sr.getMembers().keySet()) {
+                Player p = s.getPlayer();
                 if (p != null) {
                     p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GREEN + channel + ChatColor.GRAY + "]" + title + player.getDisplayName()
                             + ": " + message);
                     i++;
                 }
             }
-            for (String s : sr.getOwners()) {
-                Player p = plugin.getServer().getPlayer(s);
+            for (OfflinePlayer s : sr.getOwners()) {
+                Player p = s.getPlayer();
                 if (p != null) {
                     p.sendMessage(ChatColor.GRAY + "[" + ChatColor.GREEN + channel + ChatColor.GRAY + "]" + title + player.getDisplayName()
                             + ": " + message);

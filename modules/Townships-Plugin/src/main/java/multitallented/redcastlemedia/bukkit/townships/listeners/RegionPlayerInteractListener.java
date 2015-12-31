@@ -1,12 +1,12 @@
 package multitallented.redcastlemedia.bukkit.townships.listeners;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import multitallented.redcastlemedia.bukkit.townships.ConfigManager;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerExitRegionEvent;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerExitSRegionEvent;
@@ -14,26 +14,18 @@ import multitallented.redcastlemedia.bukkit.townships.region.Region;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionCondition;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
-import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -51,8 +43,8 @@ public class RegionPlayerInteractListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player p = event.getPlayer();
-        ArrayList<Region> previousRegions = plugin.getCheckRegionTask().lastRegion.get(p);
-        ArrayList<SuperRegion> previousSRegions = plugin.getCheckRegionTask().lastSRegion.get(p);
+        List<Region> previousRegions = plugin.getCheckRegionTask().lastRegion.get(p);
+        List<SuperRegion> previousSRegions = plugin.getCheckRegionTask().lastSRegion.get(p);
         if (previousRegions != null) {
             for (Region r : previousRegions) {
                 ToPlayerExitRegionEvent exitEent = new ToPlayerExitRegionEvent(r.getLocation(), p, true);
@@ -101,7 +93,7 @@ public class RegionPlayerInteractListener implements Listener {
         if (sr == null) {
             return;
         }
-        ArrayList<String> memberPerms = (ArrayList<String>) sr.getMember(player.getName());
+        List<String> memberPerms = (List<String>) sr.getMember(player);
         if (memberPerms == null || memberPerms.isEmpty() || !memberPerms.contains("member")) {
             return;
         }
@@ -125,7 +117,7 @@ public class RegionPlayerInteractListener implements Listener {
         int biggestTowns = 0;
         int biggestMemberTowns = 0;
         for (SuperRegion sr : rm.getSortedSuperRegions()) {
-            for (String name : sr.getOwners()) {
+            for (OfflinePlayer name : sr.getOwners()) {
                 if (!name.equals(p.getName())) {
                     continue;
                 }
@@ -137,7 +129,7 @@ public class RegionPlayerInteractListener implements Listener {
             if (biggestTowns > 0) {
                 continue;
             }
-            for (String name : sr.getMembers().keySet()) {
+            for (OfflinePlayer name : sr.getMembers().keySet()) {
                 if (!name.equals(p.getName())) {
                     continue;
                 }
@@ -168,7 +160,7 @@ public class RegionPlayerInteractListener implements Listener {
 //        if (sr == null) {
 //            return;
 //        }
-//        ArrayList<String> memberPerms = (ArrayList<String>) sr.getMember(player.getName());
+//        List<String> memberPerms = (List<String>) sr.getMember(player.getName());
 //        if (memberPerms == null || memberPerms.isEmpty() || !memberPerms.contains("member")) {
 //            return;
 //        }
@@ -192,7 +184,7 @@ public class RegionPlayerInteractListener implements Listener {
             String prevChannel = channels.get(p);
             String title = null;
             try {
-                for (String sn : rm.getSuperRegion(prevChannel).getMember(p.getName())) {
+                for (String sn : rm.getSuperRegion(prevChannel).getMember(p)) {
                     if (sn.contains("title:")) {
                         title = sn.replace("title:", "");
                     }
@@ -214,7 +206,7 @@ public class RegionPlayerInteractListener implements Listener {
         channels.put(p, s);
         String title = null;
         try {
-            for (String sn : rm.getSuperRegion(s).getMember(p.getName())) {
+            for (String sn : rm.getSuperRegion(s).getMember(p)) {
                 if (sn.contains("title:")) {
                     title = sn.replace("title:", "");
                 }
@@ -239,7 +231,7 @@ public class RegionPlayerInteractListener implements Listener {
         if (event.isCancelled() || !(event.getRightClicked() instanceof ItemFrame)) {
                 return;
         }
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_block_build", true, 0));
         conditions.add(new RegionCondition("deny_block_build_no_reagent", false, 0));
         if (rm.shouldTakeAction(event.getRightClicked().getLocation(), event.getPlayer(), conditions)) {
@@ -267,8 +259,8 @@ public class RegionPlayerInteractListener implements Listener {
             return;
         }
         if (event.getAction() == Action.PHYSICAL) {
-            if ((event.getClickedBlock().getType() == Material.CROPS || event.getClickedBlock().getTypeId() == 60)) {
-                ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+            if ((event.getClickedBlock().getType() == Material.CROPS || event.getClickedBlock().getType() == Material.SOIL)) {
+                List<RegionCondition> conditions = new ArrayList<RegionCondition>();
                 conditions.add(new RegionCondition("deny_block_break", true, 0));
                 conditions.add(new RegionCondition("deny_block_break_no_reagent", false, 0));
                 if (rm.shouldTakeAction(event.getClickedBlock().getLocation(), event.getPlayer(), conditions)) {
@@ -276,7 +268,7 @@ public class RegionPlayerInteractListener implements Listener {
                     return;
                 }
             } else {
-                ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+                List<RegionCondition> conditions = new ArrayList<RegionCondition>();
                 conditions.add(new RegionCondition("deny_player_interact", true, 0));
                 conditions.add(new RegionCondition("deny_player_interact_no_reagent", false, 0));
                 conditions.add(new RegionCondition("deny_use_circuit", true, 0));
@@ -289,7 +281,7 @@ public class RegionPlayerInteractListener implements Listener {
             return;
         }
 
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_player_interact", true, 0));
         conditions.add(new RegionCondition("deny_player_interact_no_reagent", false, 0));
         if (event.getClickedBlock().getType() == Material.LEVER || event.getClickedBlock().getType() == Material.STONE_BUTTON) {
@@ -319,7 +311,7 @@ public class RegionPlayerInteractListener implements Listener {
             return;
         }
 
-        ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+        List<RegionCondition> conditions = new ArrayList<RegionCondition>();
         conditions.add(new RegionCondition("deny_ender_pearl", true, 0));
         conditions.add(new RegionCondition("deny_ender_pearl_no_reagent", false, 0));
 

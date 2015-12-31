@@ -8,6 +8,7 @@ import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -78,7 +79,7 @@ public class EffectTeleport extends Effect {
             }
             //TODO add more error messages
             boolean ownerCheck = false;
-            for (String s : r.getOwners()) {
+            for (OfflinePlayer s : r.getOwners()) {
                 if (currentRegion.isOwner(s)) {
                     ownerCheck = true;
                     break;

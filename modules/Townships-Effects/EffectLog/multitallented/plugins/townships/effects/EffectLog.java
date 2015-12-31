@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +21,7 @@ import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -32,7 +34,7 @@ import org.bukkit.event.Listener;
 public class EffectLog extends Effect {
 
     public HashMap<String, HashMap<String, String>> previousLocations = new HashMap<String, HashMap<String, String>>();
-    public HashMap<String, ArrayList<String>> comebacks = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, List<String>> comebacks = new HashMap<String, List<String>>();
     
     public EffectLog(Townships plugin) {
         super(plugin);
@@ -55,10 +57,10 @@ public class EffectLog extends Effect {
         @EventHandler
         public void onRegionCreated(ToRegionCreatedEvent event) {
             Region r = event.getRegion();
-            String playername = r.getOwners().get(0);
+            OfflinePlayer player = r.getOwners().get(0);
             Location l = r.getLocation();
             
-            int bonusPoints = getBonusPoints(r.getType(), playername, locationToString(l));
+            int bonusPoints = getBonusPoints(r.getType(), player.getName(), locationToString(l));
             if (bonusPoints < 0) {
                 return;
             }
@@ -78,12 +80,12 @@ public class EffectLog extends Effect {
             FileConfiguration eventConfig = new YamlConfiguration();
             try {
                 eventConfig.load(eventFile);
-                int score = eventConfig.getInt(playername, 0);
-                eventConfig.set(playername, score + pointValue);
+                int score = eventConfig.getInt(player.getName(), 0);
+                eventConfig.set(player.getName(), score + pointValue);
                 eventConfig.save(eventFile);
                 
-                Bukkit.getPlayer(playername).sendMessage(ChatColor.GREEN + "[Townships] You just earned " + pointValue + " points!");
-                Bukkit.getPlayer(playername).sendMessage(ChatColor.GREEN + "[Townships] Your new total is " + (score + pointValue) + " points!");
+                player.getPlayer().sendMessage(ChatColor.GREEN + "[Townships] You just earned " + pointValue + " points!");
+                player.getPlayer().sendMessage(ChatColor.GREEN + "[Townships] Your new total is " + (score + pointValue) + " points!");
             } catch (Exception e) {
                 plugin.warning("[Townships] Unable to save to event.yml");
                 return;
@@ -105,7 +107,7 @@ public class EffectLog extends Effect {
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                 Date today = Calendar.getInstance().getTime();
                 String reportDate = df.format(today);
-                writer.write(playername + ": [" + reportDate + "] built " + r.getType() + " at " + 
+                writer.write(player.getName() + ": [" + reportDate + "] built " + r.getType() + " at " + 
                         locationToString(l) +
                         " for " + pointValue + " points\n");
                 writer.close();
@@ -122,7 +124,7 @@ public class EffectLog extends Effect {
             if (r == null) {
                 return;
             }
-            String playername = r.getOwners().get(0);
+            String playername = r.getOwners().get(0).getName();
             Location l = r.getLocation();
             
             int bonusPoints = getBonusPoints(r.getType(), playername, locationToString(l));

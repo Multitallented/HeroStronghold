@@ -7,8 +7,8 @@ package multitallented.redcastlemedia.bukkit.townships.listeners.guis;
  */
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
-
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
@@ -16,6 +16,8 @@ import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
 import net.milkbowl.vault.item.Items;
+
+
 //import net.minecraft.util.org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
@@ -32,11 +34,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class GUIListener implements Listener {
     private static RegionManager rm;
     public GUIListener(RegionManager rm) {
-        this.rm = rm;
+        GUIListener.rm = rm;
     }
     
     public static void openCategoryInventory(Player player) {
-        HashMap<String, ArrayList<String>> categories = rm.getRegionCategories();
+        HashMap<String, List<String>> categories = rm.getRegionCategories();
         int size = 9;
         int actualSize = categories.keySet().size();
         boolean hasSuperRegions = !rm.getSuperRegionTypes().isEmpty();
@@ -98,7 +100,7 @@ public class GUIListener implements Listener {
         player.openInventory(inv);
     }
     
-    public static void openListInventory(ArrayList<RegionType> regions, ArrayList<SuperRegionType> superRegions, Player player, String category) {
+    public static void openListInventory(List<RegionType> regions, List<SuperRegionType> superRegions, Player player, String category) {
         int size = 9;
         int actualSize = regions.size() + superRegions.size() + 1;
         if (actualSize > size) {
@@ -118,7 +120,7 @@ public class GUIListener implements Listener {
             ItemStack is = new ItemStack(r.getIcon());
             ItemMeta isMeta = is.getItemMeta();
             String displayName = ChatColor.RESET + r.getName();
-            ArrayList<String> lore = new ArrayList<String>();
+            List<String> lore = new ArrayList<String>();
             lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Region");
             if (r.getDescription() != null && !r.getDescription().equals("")) {
                 lore.addAll(Util.textWrap(ChatColor.RESET + "" + ChatColor.GOLD, r.getDescription()));
@@ -128,7 +130,7 @@ public class GUIListener implements Listener {
             }
             if (r.getRequirements().size() > 0) {
                 lore.add("Requirements");
-                for (ArrayList<TOItem> items : r.getRequirements()) {
+                for (List<TOItem> items : r.getRequirements()) {
                     String reagents = "";
                     for (TOItem item : items) {
                         if (!reagents.equals("")) {
@@ -149,14 +151,12 @@ public class GUIListener implements Listener {
             isMeta.setDisplayName(displayName);
             
             //Trim lore
-            trimLore: {
-                boolean addEllipses = lore.size() > 20;
-                if (addEllipses) {
-                    for (int k = lore.size(); k > 19; k--) {
-                        lore.remove(k-1);
-                    }
-                    lore.add("To be continued...");
+            boolean addEllipses = lore.size() > 20;
+            if (addEllipses) {
+                for (int k = lore.size(); k > 19; k--) {
+                    lore.remove(k-1);
                 }
+                lore.add("To be continued...");
             }
             
             
@@ -169,7 +169,7 @@ public class GUIListener implements Listener {
             ItemStack is = new ItemStack(sr.getIcon());
             ItemMeta isMeta = is.getItemMeta();
             String displayName = ChatColor.RESET + sr.getName();
-            ArrayList<String> lore = new ArrayList<String>();
+            List<String> lore = new ArrayList<String>();
             lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Super Region");
             if (sr.getDescription() != null && !sr.getDescription().equals("")) {
                 lore.addAll(Util.textWrap(ChatColor.GOLD + "", sr.getDescription()));
@@ -206,14 +206,12 @@ public class GUIListener implements Listener {
             isMeta.setDisplayName(displayName);
             
             //Trim lore
-            trimLore: {
-                boolean addEllipses = lore.size() > 20;
-                if (addEllipses) {
-                    for (int k = lore.size(); k > 19; k--) {
-                        lore.remove(k-1);
-                    }
-                    lore.add("To be continued...");
-                }
+            boolean addEllipses = lore.size() > 20;
+            if (addEllipses) {
+            	for (int k = lore.size(); k > 19; k--) {
+            		lore.remove(k-1);
+            	}
+            	lore.add("To be continued...");
             }
             
             isMeta.setLore(lore);
@@ -224,7 +222,7 @@ public class GUIListener implements Listener {
         ItemStack is = new ItemStack(Material.REDSTONE_BLOCK);
         ItemMeta isMeta = is.getItemMeta();
         isMeta.setDisplayName(ChatColor.RESET + "Back to Categories");
-        ArrayList<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<String>();
         lore.add("list " + category);
         isMeta.setLore(lore);
         is.setItemMeta(isMeta);
@@ -238,14 +236,12 @@ public class GUIListener implements Listener {
             return;
         }
         String name = ChatColor.stripColor(event.getInventory().getName());
-        String category = "";
         boolean isCategory = name.equalsIgnoreCase("Townships Categories");
         String[] names = name.split(" ");
         if (!isCategory) {
             if (names.length != 2 || !names[1].equals("Regions")) {
                 return;
             } else {
-                category = names[0].toLowerCase();
             }
         }
         Player player = (Player) event.getWhoClicked();

@@ -1,6 +1,6 @@
 package sevaron.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
@@ -41,7 +41,7 @@ public class EffectDenyMobSpawn extends Effect implements Listener {
     Location l = event.getLocation();
     RegionManager rm = this.getPlugin().getRegionManager();
 
-    ArrayList<RegionCondition> conditions = new ArrayList<RegionCondition>();
+    List<RegionCondition> conditions = new ArrayList<RegionCondition>();
     conditions.add(new RegionCondition("deny_mob_spawn", true, 0));
     conditions.add(new RegionCondition("deny_mob_spawn_no_reagent", false, 0));
     if (rm.shouldTakeAction(l, null, conditions)) {

@@ -1,6 +1,6 @@
 package multitallented.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
@@ -12,6 +12,7 @@ import multitallented.redcastlemedia.bukkit.townships.region.SuperRegion;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegionType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +25,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class EffectFood extends Effect {
     protected HashSet<SuperRegion> unfedRegions;
-    protected HashMap<SuperRegion, ArrayList<Region>> fedRegions;
+    protected HashMap<SuperRegion, List<Region>> fedRegions;
     protected final RegionManager rm;
     private final String EFFECT_NAME = "food";
     private final int EFFECT_DURATION = 600; //ticks
@@ -48,15 +49,15 @@ public class EffectFood extends Effect {
         public void onCustomEvent(ToTwoSecondEvent event) {
             RegionManager rm = effect.rm;
             for (SuperRegion sr : unfedRegions) {
-                for (String s : sr.getOwners()) {
-                    Player p = Bukkit.getPlayer(s);
+                for (OfflinePlayer s : sr.getOwners()) {
+                    Player p = s.getPlayer();
                     if (p == null || Math.random() > EFFECT_CHANCE || !rm.getContainingSuperRegions(p.getLocation()).contains(sr)) {
                         continue;
                     }
                     forceHunger(p);
                 }
-                for (String s : sr.getMembers().keySet()) {
-                    Player p = Bukkit.getPlayer(s);
+                for (OfflinePlayer s : sr.getMembers().keySet()) {
+                    Player p = s.getPlayer();
                     if (Math.random() > EFFECT_CHANCE || p == null || !sr.getMember(s).contains("member") ||
                             !rm.getContainingSuperRegions(p.getLocation()).contains(sr)) {
                         continue;
@@ -85,7 +86,7 @@ public class EffectFood extends Effect {
                     if (fedRegions.containsKey(sr)) {
                         fedRegions.get(sr).add(r);
                     } else {
-                        ArrayList<Region> re = new ArrayList<Region>();
+                        List<Region> re = new ArrayList<Region>();
                         re.add(r);
                         fedRegions.put(sr, re);
                     }
@@ -127,7 +128,7 @@ public class EffectFood extends Effect {
                 if (fedRegions.containsKey(sr)) {
                     fedRegions.get(sr).add(r);
                 } else {
-                    ArrayList<Region> re = new ArrayList<Region>();
+                    List<Region> re = new ArrayList<Region>();
                     re.add(r);
                     fedRegions.put(sr, re);
                 }
@@ -152,7 +153,7 @@ public class EffectFood extends Effect {
                     continue;
                 }
                 if (fedRegions.containsKey(sr)) {
-                    ArrayList<Region> re = fedRegions.get(sr);
+                    List<Region> re = fedRegions.get(sr);
                     if (re.contains(r)) {
                         re.remove(r);
                         if (re.isEmpty()) {

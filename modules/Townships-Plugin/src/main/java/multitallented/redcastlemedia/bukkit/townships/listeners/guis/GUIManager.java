@@ -1,12 +1,15 @@
 package multitallented.redcastlemedia.bukkit.townships.listeners.guis;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.HashMap;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -24,11 +27,9 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class GUIManager implements Listener {
     private volatile static HashMap<Player, GUI> guis = new HashMap<Player, GUI>();
-    private final Townships plugin;
     private volatile static boolean running = false;
     
     public GUIManager(Townships plugin) {
-        this.plugin = plugin;
     }
     
     public static void closeAllMenus() {
@@ -39,7 +40,7 @@ public class GUIManager implements Listener {
         }
     }
     
-    public synchronized static void addCycleItems(Player player, Inventory inv, int index, ArrayList<TOItem> items) {
+    public synchronized static void addCycleItems(Player player, Inventory inv, int index, List<TOItem> items) {
         
         boolean startCycleThread = guis.isEmpty();
         if (guis.containsKey(player)) {
@@ -92,16 +93,15 @@ public class GUIManager implements Listener {
     }
     
     private static class GUI {
-        private final Player player;
         private final Inventory inventory;
-        private ArrayList<GUIItemSet> cycleItems;
+        private List<GUIItemSet> cycleItems;
         
         private class GUIItemSet {
             private final int index;
             private int position;
-            private final ArrayList<TOItem> items;
+            private final List<TOItem> items;
             
-            public GUIItemSet(int index, int position, ArrayList<TOItem> items) {
+            public GUIItemSet(int index, int position, List<TOItem> items) {
                 this.index = index;
                 this.position = position;
                 this.items = items;
@@ -116,7 +116,7 @@ public class GUIManager implements Listener {
             public int getPosition() {
                 return position;
             }
-            public ArrayList<TOItem> getItems() {
+            public List<TOItem> getItems() {
                 return items;
             }
         }
@@ -136,7 +136,7 @@ public class GUIManager implements Listener {
                     is = new ItemStack(nextItem.getMat(), nextItem.getQty());
                     ItemMeta isMeta = is.getItemMeta();
                     if (isMeta != null) {
-                        ArrayList<String> lore = new ArrayList<String>();
+                        List<String> lore = new ArrayList<String>();
                         lore.add("Any type acceptable");
                         isMeta.setLore(lore);
                         is.setItemMeta(isMeta);
@@ -151,12 +151,11 @@ public class GUIManager implements Listener {
         }
         
         public GUI(Player player, Inventory inv) {
-            this.player=player;
             this.inventory = inv;
             this.cycleItems = new ArrayList<GUIItemSet>();
         }
         
-        public void addCycleItems(int index, ArrayList<TOItem> items) {
+        public void addCycleItems(int index, List<TOItem> items) {
             cycleItems.add(new GUIItemSet(index, 0, items));
         }
     }
@@ -172,7 +171,7 @@ public class GUIManager implements Listener {
         GUIManager.clearCycleItems(player);
     }
     
-    public static void sanitizeCycleItems(HashMap<Integer, ArrayList<TOItem>> items) {
+    public static void sanitizeCycleItems(HashMap<Integer, List<TOItem>> items) {
         for (Integer i : items.keySet()) {
             sanitizeGUIItems(items.get(i));
         }

@@ -1,6 +1,6 @@
-package main.java.multitallented.plugins.townships.effects;
+package multitallented.plugins.townships.effects;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -162,7 +162,7 @@ public class EffectConveyorBelt extends Effect {
                     removeMe.add(r);
                     return;
                 }
-                ArrayList<Region> regions = rm.getContainingBuildRegions(sm.getLocation());
+                List<Region> regions = rm.getContainingBuildRegions(sm.getLocation());
                 if (!regions.isEmpty()) {
                     Chest currentChest = null;
                     Region re;

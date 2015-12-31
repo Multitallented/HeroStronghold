@@ -1,7 +1,10 @@
 package multitallented.redcastlemedia.bukkit.townships.events;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -15,8 +18,8 @@ public class ToPlayerEnterRegionEvent extends Event implements ToEvent {
     private static final HandlerList handlers = new HandlerList();
     private final Location loc;
     private final Player player;
-    private ArrayList<Location> destroyRegions = new ArrayList<Location>();
-    private ArrayList<Region> createRegions = new ArrayList<Region>();
+    private List<Location> destroyRegions = new ArrayList<Location>();
+    private List<Region> createRegions = new ArrayList<Region>();
 
     public ToPlayerEnterRegionEvent(Location loc, Player player) {
         this.loc = loc;
@@ -24,12 +27,12 @@ public class ToPlayerEnterRegionEvent extends Event implements ToEvent {
     }
 
     @Override
-    public void setRegionsToCreate(ArrayList<Region> newRegions) {
+    public void setRegionsToCreate(List<Region> newRegions) {
         this.createRegions = newRegions;
     }
 
     @Override
-    public ArrayList<Region> getRegionsToCreate() {
+    public List<Region> getRegionsToCreate() {
         return createRegions;
     }
 
@@ -43,12 +46,12 @@ public class ToPlayerEnterRegionEvent extends Event implements ToEvent {
     }
 
     @Override
-    public ArrayList<Location> getRegionsToDestroy() {
+    public List<Location> getRegionsToDestroy() {
         return destroyRegions;
     }
 
     @Override
-    public void setRegionsToDestroy(ArrayList<Location> r) {
+    public void setRegionsToDestroy(List<Location> r) {
         this.destroyRegions = r;
     }
 

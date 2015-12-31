@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.Util;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
@@ -16,6 +17,7 @@ import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.SuperRegionType;
 import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
 import net.milkbowl.vault.item.Items;
+
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -44,7 +46,7 @@ public class InfoGUIListener implements Listener {
         ItemStack iconStack = new ItemStack(region.getIcon());
         ItemMeta iconMeta = iconStack.getItemMeta();
         iconMeta.setDisplayName(WordUtils.capitalize(region.getName()));
-        ArrayList<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<String>();
 
         int diameter = (int) (Math.floor(region.getRawBuildRadius()) * 2 + 1);
         int effectDiameter = (int) (Math.floor(region.getRawRadius()) * 2 + 1);
@@ -95,7 +97,7 @@ public class InfoGUIListener implements Listener {
         lore.add(ChatColor.GOLD + "Build a structure with these blocks.");
         if (region.getRequirements().size() > 0) {
             lore.add("Requirements");
-            for (ArrayList<TOItem> items : region.getRequirements()) {
+            for (List<TOItem> items : region.getRequirements()) {
                 String reagents = "";
                 for (TOItem item : items) {
                     if (!reagents.equals("")) {
@@ -114,14 +116,12 @@ public class InfoGUIListener implements Listener {
             }
         }
         //Trim lore
-        trimLore: {
-            boolean addEllipses = lore.size() > 20;
-            if (addEllipses) {
-                for (int k = lore.size(); k > 19; k--) {
-                    lore.remove(k-1);
-                }
-                lore.add("To be continued...");
-            }
+        boolean addEllipses = lore.size() > 20;
+        if (addEllipses) {
+        	for (int k = lore.size(); k > 19; k--) {
+        		lore.remove(k-1);
+        	}
+        	lore.add("To be continued...");
         }
         
         requireMeta.setLore(lore);
@@ -228,7 +228,7 @@ public class InfoGUIListener implements Listener {
         ItemStack iconStack = new ItemStack(region.getIcon());
         ItemMeta iconMeta = iconStack.getItemMeta();
         iconMeta.setDisplayName(WordUtils.capitalize(region.getName()));
-        ArrayList<String> lore = new ArrayList<String>();
+        List<String> lore = new ArrayList<String>();
         int diameter = (int) (Math.floor(region.getRawRadius()) * 2 + 1);
         String sizeString = diameter + "x" + diameter;
         lore.add(ChatColor.RESET + "" + ChatColor.RED + "Size: " + sizeString);
@@ -345,7 +345,7 @@ public class InfoGUIListener implements Listener {
         
         if (rt != null && event.getCurrentItem().getType() == Material.IRON_PICKAXE) {
             player.closeInventory();
-            RequirementsGUIListener.openRequirementsInventory(new ArrayList<ArrayList<TOItem>>(rt.getRequirements()), player, rt.getName()+ " requirements", backState + " " + regionTypeName);
+            RequirementsGUIListener.openRequirementsInventory(new ArrayList<List<TOItem>>(rt.getRequirements()), player, rt.getName()+ " requirements", backState + " " + regionTypeName);
             return;
         }
         if (rt != null && event.getCurrentItem().getType() == Material.IRON_AXE) {
@@ -355,17 +355,17 @@ public class InfoGUIListener implements Listener {
         }
         if (event.getCurrentItem().getType() == Material.CHEST) {
             player.closeInventory();
-            RequirementsGUIListener.openRequirementsInventory(new ArrayList<ArrayList<TOItem>>(rt.getReagents()), player, rt.getName() + " reagents", backState + " " + regionTypeName);
+            RequirementsGUIListener.openRequirementsInventory(new ArrayList<List<TOItem>>(rt.getReagents()), player, rt.getName() + " reagents", backState + " " + regionTypeName);
             return;
         }
         if (event.getCurrentItem().getType() == Material.HOPPER) {
             player.closeInventory();
-            RequirementsGUIListener.openRequirementsInventory(new ArrayList<ArrayList<TOItem>>(rt.getUpkeep()), player, rt.getName() + " input", backState + " " + regionTypeName);
+            RequirementsGUIListener.openRequirementsInventory(new ArrayList<List<TOItem>>(rt.getUpkeep()), player, rt.getName() + " input", backState + " " + regionTypeName);
             return;
         }
         if (event.getCurrentItem().getType() == Material.DISPENSER) {
             player.closeInventory();
-            RequirementsGUIListener.openRequirementsInventory(new ArrayList<ArrayList<TOItem>>(rt.getOutput()), player, rt.getName() + " output", backState + " " + regionTypeName);
+            RequirementsGUIListener.openRequirementsInventory(new ArrayList<List<TOItem>>(rt.getOutput()), player, rt.getName() + " output", backState + " " + regionTypeName);
             return;
         }
         player.closeInventory();

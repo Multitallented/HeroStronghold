@@ -92,7 +92,7 @@ public class EffectGraveyard extends Effect {
                     continue;
                 }
                 boolean hasEffect = false;
-                ArrayList<String> effects = rt.getEffects();
+                List<String> effects = rt.getEffects();
                 for (String s : effects) {
                     if (!s.startsWith("graveyard")) {
                         continue;
@@ -135,7 +135,7 @@ public class EffectGraveyard extends Effect {
                 player.sendMessage(ChatColor.RED + "[Townships] You don't have permission for /to wild");
                 return;
             }
-            ArrayList<Region> graveyards = new ArrayList<Region>();
+            List<Region> graveyards = new ArrayList<Region>();
             HashSet<String> regionTypes = new HashSet<String>();
             for (String st : getPlugin().getRegionManager().getRegionTypes()) {
                 RegionType rt = getPlugin().getRegionManager().getRegionType(st);
@@ -199,7 +199,7 @@ public class EffectGraveyard extends Effect {
             //If you didn't die in a jail, check if you died in a town with a jail
             if (!bypassJail) {
                 outer: for (SuperRegion sr : rm.getContainingSuperRegions(deathLocation)) {
-                    if (sr.hasMember(player.getName()) || sr.hasOwner(player.getName())) {
+                    if (sr.hasMember(player) || sr.hasOwner(player)) {
                         continue;
                     }
 
@@ -286,7 +286,7 @@ public class EffectGraveyard extends Effect {
         }
         
         @EventHandler(priority=HIGH)
-        public void onPlayerRespawn(PlayerRespawnEvent event) {
+        public void onplayerespawn(PlayerRespawnEvent event) {
             Player player = event.getPlayer();
             Region graveyard = respawnLocations.get(player.getName());
             if (graveyard == null) {

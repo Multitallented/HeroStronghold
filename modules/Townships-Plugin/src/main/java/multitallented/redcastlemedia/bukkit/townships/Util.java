@@ -1,14 +1,14 @@
 package multitallented.redcastlemedia.bukkit.townships;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
+import java.util.HashMap;
 import multitallented.redcastlemedia.bukkit.townships.region.Region;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionManager;
 import multitallented.redcastlemedia.bukkit.townships.region.RegionType;
+import multitallented.redcastlemedia.bukkit.townships.region.TOItem;
 import net.milkbowl.vault.item.Items;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -37,8 +37,8 @@ public class Util {
         return newFileName;
     }
 
-    public static ArrayList<String> textWrap(String prefix, String input) {
-        ArrayList<String> lore = new ArrayList<String>();
+    public static List<String> textWrap(String prefix, String input) {
+        List<String> lore = new ArrayList<String>();
         String sendMe = new String(input);
         String[] sends = sendMe.split(" ");
         String outString = "";
@@ -111,12 +111,12 @@ public class Util {
                 type != Material.WOOD_BUTTON;
     }
     
-    public static boolean containsItems(ArrayList<ArrayList<TOItem>> req, Inventory inv) {
+    public static boolean containsItems(List<List<TOItem>> req, Inventory inv) {
         if (inv == null) {
             return false;
         }
         
-        outer: for (ArrayList<TOItem> orReqs : req) {
+        outer: for (List<TOItem> orReqs : req) {
             for (TOItem orReq : orReqs) {
 
                 int amount = 0;
@@ -139,15 +139,15 @@ public class Util {
         return true;
     }
     
-    public static boolean removeItems(ArrayList<ArrayList<TOItem>> req, Inventory inv) {
+    public static boolean removeItems(List<List<TOItem>> req, Inventory inv) {
         if (inv == null) {
             return false;
         }
         
         //clone the list
-        ArrayList<ArrayList<TOItem>> hsItemsList = new ArrayList<ArrayList<TOItem>>();
-        for (ArrayList<TOItem> hsItems : req) {
-            ArrayList<TOItem> tempList = new ArrayList<TOItem>();
+        List<List<TOItem>> hsItemsList = new ArrayList<List<TOItem>>();
+        for (List<TOItem> hsItems : req) {
+            List<TOItem> tempList = new ArrayList<TOItem>();
             for (TOItem hsItem : hsItems) {
                 tempList.add(hsItem.clone());
             }
@@ -155,7 +155,7 @@ public class Util {
         }
         
         
-        ArrayList<Integer> removeItems = new ArrayList<Integer>();
+        List<Integer> removeItems = new ArrayList<Integer>();
         HashMap<Integer, Integer> reduceItems = new HashMap<Integer, Integer>();
         
         for (int i =0; i< inv.getSize(); i++) {
@@ -166,7 +166,7 @@ public class Util {
             
             int j=0;
             boolean removeIndex = false;
-            outer1: for (ArrayList<TOItem> hsItems : hsItemsList) {
+            outer1: for (List<TOItem> hsItems : hsItemsList) {
                 for (TOItem hsItem : hsItems) {
                     if (hsItem.equivalentItem(item, true)) {
                         
@@ -206,10 +206,10 @@ public class Util {
         return true;
     }
     
-    public static ArrayList<ItemStack> addItems(ArrayList<ArrayList<TOItem>> addItems, Inventory inv) {
-        ArrayList<ItemStack> remainingItems = new ArrayList<ItemStack>();
+    public static List<ItemStack> addItems(List<List<TOItem>> addItems, Inventory inv) {
+        List<ItemStack> remainingItems = new ArrayList<ItemStack>();
         
-        outer: for (ArrayList<TOItem> tempItems : addItems) {
+        outer: for (List<TOItem> tempItems : addItems) {
             double rand = Math.random();
             double prevChance = 0;
             for (TOItem item : tempItems) {
@@ -291,15 +291,15 @@ public class Util {
         return remainingItems;
     }
     
-    public static ArrayList<String> hasCreationRequirements(Location loc, RegionType rt, RegionManager rm) {
+    public static List<String> hasCreationRequirements(Location loc, RegionType rt, RegionManager rm) {
         if (rt.getRequirements().isEmpty()) {
             return new ArrayList<String>();
         }
         
-        ArrayList<ArrayList<TOItem>> reqMap = new ArrayList<ArrayList<TOItem>>();
+        List<List<TOItem>> reqMap = new ArrayList<List<TOItem>>();
 
-        for (ArrayList<TOItem> currentStack : rt.getRequirements()) {
-            ArrayList<TOItem> tempMap = new ArrayList<TOItem>();
+        for (List<TOItem> currentStack : rt.getRequirements()) {
+            List<TOItem> tempMap = new ArrayList<TOItem>();
                     
             for (TOItem hsItem : currentStack) {
                 tempMap.add(hsItem.clone());
@@ -329,7 +329,7 @@ public class Util {
                     
                     int p = 0;
                     boolean destroyIndex = false;
-                    outer1: for (ArrayList<TOItem> tempMap : reqMap) {
+                    outer1: for (List<TOItem> tempMap : reqMap) {
                         for (TOItem item : tempMap) {
                             if (item.getMat() == is.getType() && (item.isWildDamage() || item.damageMatches(is.getDurability()))) {
                                 if (item.getQty() < 2) {
@@ -353,9 +353,9 @@ public class Util {
             }
         }
         
-        ArrayList<String> message = new ArrayList<String>();
+        List<String> message = new ArrayList<String>();
         
-        for (ArrayList<TOItem> items : reqMap) {
+        for (List<TOItem> items : reqMap) {
             String tempMessage = "- ";
             for (TOItem item : items) {
                 String itemName = "";
@@ -383,10 +383,10 @@ public class Util {
             return true;
         }
         
-        ArrayList<ArrayList<TOItem>> reqMap = new ArrayList<ArrayList<TOItem>>();
+        List<List<TOItem>> reqMap = new ArrayList<List<TOItem>>();
 
-        for (ArrayList<TOItem> currentStack : rt.getRequirements()) {
-            ArrayList<TOItem> tempMap = new ArrayList<TOItem>();
+        for (List<TOItem> currentStack : rt.getRequirements()) {
+            List<TOItem> tempMap = new ArrayList<TOItem>();
                     
             for (TOItem hsItem : currentStack) {
                 tempMap.add(hsItem.clone());
@@ -415,7 +415,7 @@ public class Util {
                     
                     int p = 0;
                     boolean destroyIndex = false;
-                    outer1: for (ArrayList<TOItem> tempMap : reqMap) {
+                    outer1: for (List<TOItem> tempMap : reqMap) {
                         for (TOItem item : tempMap) {
                             if (item.getMat() == is.getType() && (item.isWildDamage() || item.damageMatches(is.getDurability()))) {
                                 if (item.getQty() < 2) {
@@ -444,7 +444,8 @@ public class Util {
     public static boolean hasRequiredBlocks(Region region, RegionManager rm) {
         return Util.hasRequiredBlocks(region.getLocation(), rm.getRegionType(region.getType()), rm);
     }
-    
+
+    @Deprecated
     public static ItemStack stringToItemStack(String input) {
         try {
             String[] inputArray = input.split("\\.");
@@ -476,7 +477,7 @@ public class Util {
             }
             return returnStack;
         } catch (Exception e) {
-            return new ItemStack(1);
+            return new ItemStack(Material.STONE);
         }
     }
 }

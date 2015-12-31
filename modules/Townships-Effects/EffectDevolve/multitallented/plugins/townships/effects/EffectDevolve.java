@@ -2,7 +2,7 @@ package multitallented.plugins.townships.effects;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import multitallented.redcastlemedia.bukkit.townships.ConfigManager;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
@@ -100,7 +100,7 @@ public class EffectDevolve extends Effect {
                 Bukkit.getPluginManager().callEvent(destroyedEvent);
             }
             
-            ArrayList<Location> childLocations = sr.getChildLocations();
+            List<Location> childLocations = sr.getChildLocations();
             if (childLocations != null && !childLocations.isEmpty()) {
                 Location newLocation = sr.getChildLocations().get(sr.getChildLocations().size() - 1);
                 plugin.getRegionManager().setNewSRLocation(sr, newLocation);

@@ -1,6 +1,7 @@
 package multitallented.plugins.townships.effects;
 
 import java.util.ArrayList;
+import java.util.List;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPreRegionCreatedEvent;
@@ -42,7 +43,7 @@ public class EffectExclusive extends Effect {
             RegionType rt = event.getRegionType();
             Player player = event.getPlayer();
             String[] parts;
-            ArrayList<String> exclusions = new ArrayList<String>();
+            List<String> exclusions = new ArrayList<String>();
             for (String s : rt.getEffects()) {
                 parts = s.split("\\.");
                 if (parts.length > 1 && parts[0].equals("exclusive")) {

@@ -1,6 +1,7 @@
 package multitallented.plugins.townships.effects;
 
 import java.util.ArrayList;
+import java.util.List;
 import multitallented.redcastlemedia.bukkit.townships.Townships;
 import multitallented.redcastlemedia.bukkit.townships.effect.Effect;
 import multitallented.redcastlemedia.bukkit.townships.events.ToPlayerInRegionEvent;
@@ -41,7 +42,7 @@ public class EffectLandMine extends Effect {
             Player player = event.getPlayer();
             
             Location l = event.getLocation();
-            ArrayList<String> effects = rm.getRegionType(rm.getRegion(l).getType()).getEffects();
+            List<String> effects = rm.getRegionType(rm.getRegion(l).getType()).getEffects();
 
             //Check if the region has the shoot arrow effect and return arrow velocity
             int explode = effect.regionHasEffect(effects, "landmine");
@@ -70,7 +71,7 @@ public class EffectLandMine extends Effect {
             }
             
             //Set the event to destroy the region
-            ArrayList<Location> tempArray = new ArrayList<Location>();
+            List<Location> tempArray = new ArrayList<Location>();
             tempArray.add(l);
             event.setRegionsToDestroy(tempArray);
         }

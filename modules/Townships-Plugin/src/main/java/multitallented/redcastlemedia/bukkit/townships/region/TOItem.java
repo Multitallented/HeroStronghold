@@ -1,6 +1,7 @@
 package multitallented.redcastlemedia.bukkit.townships.region;
 
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,17 +11,15 @@ import org.bukkit.inventory.ItemStack;
  */
 public class TOItem {
     private Material mat;
-    private final int id;
     private final int damage;
     private int qty;
     private final double chance;
     private final boolean wildDamage;
     private String displayName = null;
-    private ArrayList<String> lore = new ArrayList<String>();
+    private List<String> lore = new ArrayList<String>();
 
-    public TOItem(Material mat, int id, int qty, int damage, int chance, String displayName, ArrayList<String> lore) {
+    public TOItem(Material mat, int qty, int damage, int chance, String displayName, List<String> lore) {
         this.mat = mat;
-        this.id = id;
         this.damage = damage;
         this.qty = qty;
         this.chance = ((double) chance) / 100;
@@ -29,38 +28,35 @@ public class TOItem {
         this.lore = lore;
     }
 
-    public TOItem(Material mat, int id, int qty, int damage, int chance) {
+    public TOItem(Material mat, int qty, int damage, int chance) {
         this.mat = mat;
-        this.id = id;
         this.damage = damage;
         this.qty = qty;
         this.chance = ((double) chance) / 100;
         wildDamage = damage == -1;
     }
     
-    public TOItem(Material mat, int id, int qty, int damage) {
+    public TOItem(Material mat, int qty, int damage) {
         this.mat = mat;
-        this.id = id;
         this.damage = damage;
         this.qty = qty;
         this.chance = 1;
         wildDamage = damage == -1;
     }
-    public TOItem(Material mat, int id, int qty) {
+    public TOItem(Material mat, int qty) {
         this.mat = mat;
-        this.id = id;
         this.damage = -1;
         this.qty = qty;
         this.chance = 1;
         wildDamage = true;
     }
-    
-    public boolean damageMatches(short durability) {
+
+	public boolean damageMatches(short durability) {
         int dur = (int) durability;
         if (dur == damage) {
             return true;
         }
-        if ((id == 17 || id == 162) && ((damage + 4) == dur || (damage + 8) == dur || (damage + 12) == dur)) {
+        if ((mat == Material.LOG || mat == Material.LOG_2) && ((damage + 4) == dur || (damage + 8) == dur || (damage + 12) == dur)) {
             return true;
         }
         return false;
@@ -72,12 +68,12 @@ public class TOItem {
 
     public static TOItem createFromItemStack(ItemStack is) {
         if (is.hasItemMeta() && !is.getItemMeta().getDisplayName().equals("")) {
-            return new TOItem(is.getType(),is.getTypeId(),is.getAmount(), is.getDurability(), 100, is.getItemMeta().getDisplayName(), (ArrayList<String>) is.getItemMeta().getLore());
+            return new TOItem(is.getType(), is.getAmount(), is.getDurability(), 100, is.getItemMeta().getDisplayName(), (List<String>) is.getItemMeta().getLore());
         }
         if (is.getDurability() > 0) {
-            return new TOItem(is.getType(),is.getTypeId(),is.getAmount(), is.getDurability());
+            return new TOItem(is.getType(), is.getAmount(), is.getDurability());
         }
-        return new TOItem(is.getType(),is.getTypeId(),is.getAmount());
+        return new TOItem(is.getType(), is.getAmount());
     }
     
     public boolean equivalentItem(ItemStack iss, boolean useDisplayName) {
@@ -111,7 +107,7 @@ public class TOItem {
         }
     }
 
-    public ArrayList<String> getLore() {
+    public List<String> getLore() {
         return lore;
     }
 
@@ -125,9 +121,6 @@ public class TOItem {
     
     public Material getMat() {
         return mat;
-    }
-    public int getID() {
-        return id;
     }
     public int getDamage() {
         return damage;
@@ -147,6 +140,6 @@ public class TOItem {
     
     @Override
     public TOItem clone() {
-        return new TOItem(mat, id, qty, damage, (int) chance, displayName, lore);
+        return new TOItem(mat, qty, damage, (int) chance, displayName, lore);
     }
 }
